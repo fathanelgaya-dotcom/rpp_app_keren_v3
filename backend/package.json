@@ -1,0 +1,27 @@
+{
+  "name": "app_rpp_keren_v3_backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "body-parser": "^1.20.3",
+    "cors": "^2.8.5",
+    "docx": "^9.5.1",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "groq-sdk": "^0.33.0",
+    "index.js": "^0.0.3",
+    "node-fetch": "^3.3.2",
+    "nodenode": "^1.0.0",
+    "openai": "^6.1.0",
+    "pg": "^8.16.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
+  }
+}
