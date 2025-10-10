@@ -1,15 +1,17 @@
 // config/db.js
 import dotenv from "dotenv";
-dotenv.config(); // ✅ load .env di sini
+dotenv.config();
 
 import pkg from "pg";
 const { Pool } = pkg;
 
-// cek apakah DATABASE_URL kebaca
 console.log("📌 DATABASE_URL =", JSON.stringify(process.env.DATABASE_URL));
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false, // ✅ WAJIB untuk Neon
+  },
 });
 
 pool.connect()
