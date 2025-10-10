@@ -1,0 +1,59 @@
+# === Node.js umum ===
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+
+# === Environment & konfigurasi rahasia ===
+.env
+.env.local
+.env.*.local
+backend/.env
+frontend/.env
+
+# === Build dan output ===
+/build
+/dist
+/frontend/build
+/frontend/dist
+/backend/build
+/backend/dist
+
+# === File sistem lokal ===
+.DS_Store
+Thumbs.db
+
+# === Editor & IDE ===
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# === Log aplikasi ===
+*.log
+logs/
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# === Mac/Windows system files ===
+ehthumbs.db
+Icon?
+Desktop.ini
+
+# === Backup atau sementara ===
+*.bak
+*.tmp
+*.swp
+*.orig
+
+# === Coverage / testing ===
+coverage/
+.nyc_output/
+
+# === GitHub-specific ===
+*.tgz
