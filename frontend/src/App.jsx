@@ -1,82 +1,107 @@
-import React, { useState } from "react";
-import axios from "axios";
-import "./style.css";
-import logo from "./logo/logo.png";
+import React, { useState } from 'react';
+import axios from 'axios';
+import './style.css';
+import logo from './logo/logo.png';
 
-// ✅ base URL otomatis ambil dari .env, fallback ke localhost saat dev
-const API_BASE = (import.meta.env.VITE_API_URL || "http://localhost:4000").replace(/\/$/, "");
+// Dropdown options
+const PROFILE_OPTIONS = [
+  'Keimanan dan ketaqwaan kepada Tuhan YME',
+  'Kewargaan', 'Kreativitas', 'Kemandirian', 'Komunikasi',
+  'Kesehatan', 'Kolaborasi', 'Penalaran Kritis'
+];
+
+const TOPIK_KBC = [
+  'Cinta Allah dan Rasul-Nya', 'Cinta ilmu', 'Cinta lingkungan',
+  'Cinta diri dan sesama', 'Cinta tanah air'
+];
+
+const PEDAGOGIK_OPTIONS = [
+  'Pembelajaran Mendalam (default)',
+  'Problem Based Learning (PBL)',
+  'Project Based Learning (PjBL)',
+  'Discovery Learning', 'Inquiry Learning',
+  'PAIKEM', 'Cooperative Learning',
+  'LOK-R (literasi, orientasi, komunikasi, refleksi)'
+];
+
+// Theme colors
+const COLORS = { black:'#0b0b0b', red:'#d9534f', green:'#5cb85c', blue:'#337ab7', purple:'#6f42c1' };
+
+// Base URL from .env or localhost
+const API_BASE = (import.meta.env.VITE_API_URL || 'http://localhost:4000').replace(/\/$/, '');
 
 export default function App() {
   // ---------------- State ----------------
   const [user, setUser] = useState(null);
-  const [loginForm, setLoginForm] = useState({ username: "", password: "" });
-  const [registerForm, setRegisterForm] = useState({ username: "", password: "" });
+  const [loginForm, setLoginForm] = useState({ username:'', password:'' });
+  const [registerForm, setRegisterForm] = useState({ username:'', password:'' });
   const [form, setForm] = useState({
-    namaMadrasah: "", mataPelajaran: "", fase: "", kelas: "",
-    tema: "", tahunAjaran: "", alokasiWaktu: "", cp: "",
-    profilLulusan: "", topikKBC: "", praktekPedagogik: ""
+    namaMadrasah:'', mataPelajaran:'', fase:'', kelas:'',
+    tema:'', tahunAjaran:'', alokasiWaktu:'', cp:'',
+    profilLulusan:PROFILE_OPTIONS[0],
+    topikKBC:TOPIK_KBC[0],
+    praktekPedagogik:PEDAGOGIK_OPTIONS[0]
   });
   const [preview, setPreview] = useState(null);
-  const [info, setInfo] = useState("");
+  const [info, setInfo] = useState('');
   const [generateCount, setGenerateCount] = useState(0);
-  const [theme, setTheme] = useState("purple");
+  const [theme, setTheme] = useState('purple');
 
-  const COLORS = { black:'#0b0b0b', red:'#d9534f', green:'#5cb85c', blue:'#337ab7', purple:'#6f42c1' };
+  const onChange = (k,v) => setForm(prev => ({ ...prev, [k]:v }));
 
   // ---------------- Handlers ----------------
-  const onChange = (k, v) => setForm(prev => ({ ...prev, [k]: v }));
-
   const register = async () => {
     try {
       const r = await axios.post(`${API_BASE}/api/register`, registerForm);
       setInfo(r.data.ok ? `Register sukses: ${r.data.user.username}` : `Register gagal: ${r.data.error}`);
-    } catch (e) { setInfo("Register error: " + e.message); }
+    } catch(e) { setInfo('Register error: ' + e.message); }
   };
 
   const login = async () => {
     try {
       const r = await axios.post(`${API_BASE}/api/login`, loginForm);
-      if (r.data.ok) {
+      if(r.data.ok){
         setUser(r.data.user);
         setGenerateCount(r.data.user.generate_count || 0);
         setInfo(`Login sukses: ${r.data.user.username}`);
       } else setInfo(`Login gagal: ${r.data.error}`);
-    } catch (e) { setInfo("Login error: " + e.message); }
+    } catch(e){ setInfo('Login error: '+e.message); }
   };
 
   const generate = async () => {
-    if (!user) return setInfo("Login dulu sebelum generate.");
-    setInfo("Menghubungi server untuk generate RPP...");
-    try {
-      const payload = { ...form, userId: user.id };
+    if(!user) return setInfo('Login dulu sebelum generate.');
+    setInfo('Menghubungi server untuk generate RPP...');
+    try{
+      const payload = { ...form, userId:user.id };
       const r = await axios.post(`${API_BASE}/api/generate-rpp`, payload);
-      if (r.data.ok) {
+      if(r.data.ok){
         setPreview(r.data.data);
-        setGenerateCount(generateCount + 1);
-        setInfo("Berhasil generate.");
-      } else setInfo("Gagal generate: " + (r.data.error || "unknown"));
-    } catch (e) { setInfo("Error: " + e.message); }
+        setGenerateCount(generateCount+1);
+        setInfo('Berhasil generate.');
+      } else setInfo('Gagal generate: '+(r.data.error||'unknown'));
+    } catch(e){ setInfo('Error: '+e.message); }
   };
 
   const downloadWord = async () => {
-    if (!preview) return setInfo("Belum ada RPP untuk diunduh.");
-    setInfo("Mempersiapkan dokumen Word...");
-    try {
-      const r = await axios.post(`${API_BASE}/api/export-word`, preview, { responseType: "blob" });
-      const blob = new Blob([r.data], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+    if(!preview) return setInfo('Belum ada RPP untuk diunduh.');
+    setInfo('Mempersiapkan dokumen Word...');
+    try{
+      const r = await axios.post(`${API_BASE}/api/export-word`, preview, { responseType:'blob' });
+      const blob = new Blob([r.data], { type:'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
       const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
+      const a = document.createElement('a');
       a.href = url;
-      a.download = "RPP_Integrasi_App.docx";
+      a.download = 'RPP_Integrasi_App.docx';
       a.click();
       URL.revokeObjectURL(url);
-      setInfo("Download dimulai.");
-    } catch(e) { setInfo("Gagal download: " + e.message); }
+      setInfo('Download dimulai.');
+    } catch(e){ setInfo('Gagal download: '+e.message); }
   };
 
   // ---------------- Render ----------------
   return (
     <div className="app" style={{ background:`linear-gradient(135deg, ${COLORS[theme]} 0%, #2f2b5a 100%)` }}>
+      
       {/* Header */}
       <header className="header">
         <div className="header-left">
@@ -89,7 +114,9 @@ export default function App() {
         </div>
       </header>
 
-      <div className="info-banner">Aplikasi ini dibuat oleh Pengawas Keren Youtube Channel ©2025 WA 087866174274</div>
+      <div className="info-banner">
+        Aplikasi ini dibuat oleh Pengawas Keren Youtube Channel ©2025 WA 087866174274
+      </div>
 
       {/* Login/Register */}
       {!user && (
@@ -118,11 +145,27 @@ export default function App() {
             <label key={k}>{label}<input value={form[k]} onChange={e=>onChange(k,e.target.value)}/></label>
           ))}
           <label>CP<textarea value={form.cp} onChange={e=>onChange('cp', e.target.value)} /></label>
+          <label>Profil Lulusan
+            <select value={form.profilLulusan} onChange={e=>onChange('profilLulusan', e.target.value)}>
+              {PROFILE_OPTIONS.map(p=><option key={p} value={p}>{p}</option>)}
+            </select>
+          </label>
+          <label>Topik KBC
+            <select value={form.topikKBC} onChange={e=>onChange('topikKBC', e.target.value)}>
+              {TOPIK_KBC.map(p=><option key={p} value={p}>{p}</option>)}
+            </select>
+          </label>
+          <label>Praktek Pedagogik
+            <select value={form.praktekPedagogik} onChange={e=>onChange('praktekPedagogik', e.target.value)}>
+              {PEDAGOGIK_OPTIONS.map(p=><option key={p} value={p}>{p}</option>)}
+            </select>
+          </label>
         </div>
+
         <div className="preview-col">
           <h3>Preview RPP</h3>
           <div className="preview-box">
-            {preview ? <pre>{JSON.stringify(preview, null, 2)}</pre> : <p>Hasil RPP akan muncul di sini setelah klik “Buat RPP”.</p>}
+            {preview ? <pre>{JSON.stringify(preview,null,2)}</pre> : <p>Hasil RPP akan muncul di sini setelah klik “Buat RPP”.</p>}
           </div>
         </div>
       </div>
@@ -141,7 +184,4 @@ export default function App() {
       {/* Theme */}
       <div className="color-row">
         {Object.keys(COLORS).map(c=><button key={c} style={{background:COLORS[c]}} onClick={()=>setTheme(c)} title={c}></button>)}
-      </div>
-    </div>
-  );
-}
+     
