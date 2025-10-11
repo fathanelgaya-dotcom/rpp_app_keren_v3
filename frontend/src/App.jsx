@@ -3,160 +3,145 @@ import axios from "axios";
 import "./style.css";
 import logo from "./logo/logo.png";
 
-// ✅ base URL otomatis ambil dari .env (Vercel), fallback ke localhost saat dev
+// ✅ base URL otomatis ambil dari .env, fallback ke localhost saat dev
 const API_BASE = (import.meta.env.VITE_API_URL || "http://localhost:4000").replace(/\/$/, "");
 
-function App() {
+export default function App() {
+  // ---------------- State ----------------
+  const [user, setUser] = useState(null);
   const [loginForm, setLoginForm] = useState({ username: "", password: "" });
   const [registerForm, setRegisterForm] = useState({ username: "", password: "" });
-  const [isRegister, setIsRegister] = useState(false);
+  const [form, setForm] = useState({
+    namaMadrasah: "", mataPelajaran: "", fase: "", kelas: "",
+    tema: "", tahunAjaran: "", alokasiWaktu: "", cp: "",
+    profilLulusan: "", topikKBC: "", praktekPedagogik: ""
+  });
   const [preview, setPreview] = useState(null);
-  const [payload, setPayload] = useState({ namaGuru: "", mataPelajaran: "", kelas: "", materi: "" });
+  const [info, setInfo] = useState("");
+  const [generateCount, setGenerateCount] = useState(0);
+  const [theme, setTheme] = useState("purple");
 
-  // ---------- LOGIN ----------
-  const handleLogin = async () => {
-    try {
-      const r = await axios.post(`${API_BASE}/api/login`, loginForm);
-      alert("Login berhasil ✅");
-      console.log(r.data);
-    } catch (err) {
-      alert("Login gagal ❌");
-      console.error(err);
-    }
-  };
+  const COLORS = { black:'#0b0b0b', red:'#d9534f', green:'#5cb85c', blue:'#337ab7', purple:'#6f42c1' };
 
-  // ---------- REGISTER ----------
-  const handleRegister = async () => {
+  // ---------------- Handlers ----------------
+  const onChange = (k, v) => setForm(prev => ({ ...prev, [k]: v }));
+
+  const register = async () => {
     try {
       const r = await axios.post(`${API_BASE}/api/register`, registerForm);
-      alert("Registrasi berhasil ✅");
-      console.log(r.data);
-    } catch (err) {
-      alert("Registrasi gagal ❌");
-      console.error(err);
-    }
+      setInfo(r.data.ok ? `Register sukses: ${r.data.user.username}` : `Register gagal: ${r.data.error}`);
+    } catch (e) { setInfo("Register error: " + e.message); }
   };
 
-  // ---------- GENERATE RPP ----------
-  const handleGenerateRPP = async () => {
+  const login = async () => {
     try {
-      const r = await axios.post(`${API_BASE}/api/generate-rpp`, payload);
-      setPreview(r.data);
-      alert("RPP berhasil dibuat ✅");
-      console.log(r.data);
-    } catch (err) {
-      alert("Gagal membuat RPP ❌");
-      console.error(err);
-    }
+      const r = await axios.post(`${API_BASE}/api/login`, loginForm);
+      if (r.data.ok) {
+        setUser(r.data.user);
+        setGenerateCount(r.data.user.generate_count || 0);
+        setInfo(`Login sukses: ${r.data.user.username}`);
+      } else setInfo(`Login gagal: ${r.data.error}`);
+    } catch (e) { setInfo("Login error: " + e.message); }
   };
 
-  // ---------- EXPORT WORD ----------
-  const handleExportWord = async () => {
+  const generate = async () => {
+    if (!user) return setInfo("Login dulu sebelum generate.");
+    setInfo("Menghubungi server untuk generate RPP...");
+    try {
+      const payload = { ...form, userId: user.id };
+      const r = await axios.post(`${API_BASE}/api/generate-rpp`, payload);
+      if (r.data.ok) {
+        setPreview(r.data.data);
+        setGenerateCount(generateCount + 1);
+        setInfo("Berhasil generate.");
+      } else setInfo("Gagal generate: " + (r.data.error || "unknown"));
+    } catch (e) { setInfo("Error: " + e.message); }
+  };
+
+  const downloadWord = async () => {
+    if (!preview) return setInfo("Belum ada RPP untuk diunduh.");
+    setInfo("Mempersiapkan dokumen Word...");
     try {
       const r = await axios.post(`${API_BASE}/api/export-word`, preview, { responseType: "blob" });
-      const url = window.URL.createObjectURL(new Blob([r.data]));
-      const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute("download", "RPP.docx");
-      document.body.appendChild(link);
-      link.click();
-      alert("Berhasil diexport ke Word ✅");
-    } catch (err) {
-      alert("Export Word gagal ❌");
-      console.error(err);
-    }
+      const blob = new Blob([r.data], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "RPP_Integrasi_App.docx";
+      a.click();
+      URL.revokeObjectURL(url);
+      setInfo("Download dimulai.");
+    } catch(e) { setInfo("Gagal download: " + e.message); }
   };
 
+  // ---------------- Render ----------------
   return (
-    <div className="app-container">
-      <img src={logo} alt="Logo" className="logo" />
-      <h1>📘 Aplikasi RPP Keren</h1>
+    <div className="app" style={{ background:`linear-gradient(135deg, ${COLORS[theme]} 0%, #2f2b5a 100%)` }}>
+      {/* Header */}
+      <header className="header">
+        <div className="header-left">
+          <img src={logo} alt="Logo" className="logo" />
+        </div>
+        <div className="header-center">
+          <h1>APLIKASI PEMBUAT RPP</h1>
+          <h2>Integrasi Deep Learning dan KBC</h2>
+          <p>Pengawas Keren</p>
+        </div>
+      </header>
 
-      {/* Toggle Login/Register */}
-      <button onClick={() => setIsRegister(!isRegister)}>
-        {isRegister ? "Sudah punya akun? Login" : "Belum punya akun? Register"}
-      </button>
+      <div className="info-banner">Aplikasi ini dibuat oleh Pengawas Keren Youtube Channel ©2025 WA 087866174274</div>
 
-      {/* LOGIN FORM */}
-      {!isRegister && (
-        <div className="card">
-          <h2>Login</h2>
-          <input
-            type="text"
-            placeholder="Username"
-            value={loginForm.username}
-            onChange={(e) => setLoginForm({ ...loginForm, username: e.target.value })}
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            value={loginForm.password}
-            onChange={(e) => setLoginForm({ ...loginForm, password: e.target.value })}
-          />
-          <button onClick={handleLogin}>Login</button>
+      {/* Login/Register */}
+      {!user && (
+        <div className="login-box">
+          <div className="register-section">
+            <label>User Name<input value={registerForm.username} onChange={e=>setRegisterForm({...registerForm, username:e.target.value})}/></label>
+            <label>Password<input type="password" value={registerForm.password} onChange={e=>setRegisterForm({...registerForm, password:e.target.value})}/></label>
+            <button onClick={register}>Registrasi</button>
+          </div>
+          <div className="login-section">
+            <label>User Name<input value={loginForm.username} onChange={e=>setLoginForm({...loginForm, username:e.target.value})}/></label>
+            <label>Password<input type="password" value={loginForm.password} onChange={e=>setLoginForm({...loginForm, password:e.target.value})}/></label>
+            <button onClick={login}>Login</button>
+          </div>
         </div>
       )}
 
-      {/* REGISTER FORM */}
-      {isRegister && (
-        <div className="card">
-          <h2>Register</h2>
-          <input
-            type="text"
-            placeholder="Username"
-            value={registerForm.username}
-            onChange={(e) => setRegisterForm({ ...registerForm, username: e.target.value })}
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            value={registerForm.password}
-            onChange={(e) => setRegisterForm({ ...registerForm, password: e.target.value })}
-          />
-          <button onClick={handleRegister}>Daftar</button>
+      {/* Form + Preview */}
+      <div className="form-preview">
+        <div className="form-col">
+          {Object.entries({
+            namaMadrasah:'Nama Madrasah', mataPelajaran:'Mata Pelajaran',
+            fase:'Fase', kelas:'Kelas', tahunAjaran:'Tahun Ajaran',
+            alokasiWaktu:'Alokasi Waktu', tema:'Tema/Materi'
+          }).map(([k,label])=>(
+            <label key={k}>{label}<input value={form[k]} onChange={e=>onChange(k,e.target.value)}/></label>
+          ))}
+          <label>CP<textarea value={form.cp} onChange={e=>onChange('cp', e.target.value)} /></label>
         </div>
-      )}
-
-      {/* FORM RPP */}
-      <div className="card">
-        <h2>Generate RPP</h2>
-        <input
-          type="text"
-          placeholder="Nama Guru"
-          value={payload.namaGuru}
-          onChange={(e) => setPayload({ ...payload, namaGuru: e.target.value })}
-        />
-        <input
-          type="text"
-          placeholder="Mata Pelajaran"
-          value={payload.mataPelajaran}
-          onChange={(e) => setPayload({ ...payload, mataPelajaran: e.target.value })}
-        />
-        <input
-          type="text"
-          placeholder="Kelas"
-          value={payload.kelas}
-          onChange={(e) => setPayload({ ...payload, kelas: e.target.value })}
-        />
-        <input
-          type="text"
-          placeholder="Materi"
-          value={payload.materi}
-          onChange={(e) => setPayload({ ...payload, materi: e.target.value })}
-        />
-        <button onClick={handleGenerateRPP}>Generate</button>
+        <div className="preview-col">
+          <h3>Preview RPP</h3>
+          <div className="preview-box">
+            {preview ? <pre>{JSON.stringify(preview, null, 2)}</pre> : <p>Hasil RPP akan muncul di sini setelah klik “Buat RPP”.</p>}
+          </div>
+        </div>
       </div>
 
-      {/* PREVIEW RPP */}
-      {preview && (
-        <div className="preview-card">
-          <h2>📄 Preview RPP</h2>
-          <pre>{JSON.stringify(preview, null, 2)}</pre>
-          <button onClick={handleExportWord}>Export ke Word</button>
+      {/* Bottom Row */}
+      {user && (
+        <div className="bottom-row">
+          <div className="info-box">Info: {info} | Jumlah generate: {generateCount}</div>
+          <div>
+            <button onClick={generate}>Buat RPP</button>
+            <button onClick={downloadWord}>Download Word</button>
+          </div>
         </div>
       )}
+
+      {/* Theme */}
+      <div className="color-row">
+        {Object.keys(COLORS).map(c=><button key={c} style={{background:COLORS[c]}} onClick={()=>setTheme(c)} title={c}></button>)}
+      </div>
     </div>
   );
 }
-
-export default App;
