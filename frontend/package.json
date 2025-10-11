@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "vite",
-    "build": "npm rebuild esbuild && vite build",
+    "build": "npm rebuild esbuild && npm rebuild rollup && vite build",
     "preview": "vite preview"
   },
   "engines": {
