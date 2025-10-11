@@ -185,3 +185,7 @@ export default function App() {
       <div className="color-row">
         {Object.keys(COLORS).map(c=><button key={c} style={{background:COLORS[c]}} onClick={()=>setTheme(c)} title={c}></button>)}
      
+      </div>
+    </div>
+  );
+}
