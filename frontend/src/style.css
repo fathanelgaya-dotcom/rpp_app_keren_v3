@@ -1,5 +1,3 @@
-/* style.css */
-
 /* Reset ringan */
 * {
   box-sizing: border-box;
@@ -41,8 +39,8 @@
 
 /* Judul utama */
 .header-center h1 {
-  font-size: 3rem;   /* lebih besar */
-  font-weight: 990;
+  font-size: 3rem;
+  font-weight: 900;
   margin-bottom: 8px;
 }
 
@@ -58,11 +56,9 @@
   color: #ddd;
 }
 
-
-
 /* Info banner */
 .info-banner {
-  background: rgba(0,0,0,0.3);
+  background: rgba(0, 0, 0, 0.3);
   padding: 10px;
   margin-bottom: 20px;
   text-align: center;
@@ -75,6 +71,7 @@
   display: flex;
   gap: 20px;
   margin-bottom: 20px;
+  flex-wrap: wrap;
 }
 
 .login-box label {
@@ -139,42 +136,15 @@
 }
 
 .preview-box {
-  background: rgba(0,0,0,0.2);
-  padding: 10px;
-  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 20px;
+  border-radius: 10px;
   max-height: 560px;
   overflow-y: auto;
   font-size: 0.85rem;
+  color: black;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
-
-.preview-box h2 {
-  font-size: 1.5rem;
-  font-weight: bold;
-  text-align: center;
-  text-decoration: underline;
-  margin-bottom: 10px;
-}
-
-.preview-box h4 {
-  font-size: 1.1rem;
-  font-weight: bold;
-  margin-top: 10px;
-  margin-bottom: 5px;
-}
-
-.preview-box p {
-  margin: 5px 0;
-}
-
-.preview-box ul, .preview-box ol {
-  margin-left: 20px;
-  margin-bottom: 5px;
-}
-
-.preview-box li {
-  margin-bottom: 3px;
-}
-
 
 /* Bottom row */
 .bottom-row {
@@ -224,7 +194,7 @@
   opacity: 0.8;
 }
 
-/* Responsive kecil */
+/* Responsive */
 @media (max-width: 800px) {
   .form-preview {
     flex-direction: column;
