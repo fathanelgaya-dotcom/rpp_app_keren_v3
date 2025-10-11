@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "vite",
-    "build": "npm rebuild esbuild && npm rebuild rollup && vite build",
+    "build": "npm rebuild esbuild && npm rebuild rollup && npm install @rollup/rollup-linux-x64-gnu --save-optional && vite build",
     "preview": "vite preview"
   },
   "engines": {
