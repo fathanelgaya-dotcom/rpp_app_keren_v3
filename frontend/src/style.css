@@ -147,6 +147,35 @@
   font-size: 0.85rem;
 }
 
+.preview-box h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+  text-decoration: underline;
+  margin-bottom: 10px;
+}
+
+.preview-box h4 {
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+
+.preview-box p {
+  margin: 5px 0;
+}
+
+.preview-box ul, .preview-box ol {
+  margin-left: 20px;
+  margin-bottom: 5px;
+}
+
+.preview-box li {
+  margin-bottom: 3px;
+}
+
+
 /* Bottom row */
 .bottom-row {
   display: flex;
