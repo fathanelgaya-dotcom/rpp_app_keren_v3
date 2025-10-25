@@ -87,6 +87,17 @@ export function buildMock(payload) {
       `Generalisasi: Guru menuntun murid menarik kesimpulan dari hasil pembelajaran, murid nyimpulkan dan mempresentasikan hasil kegiatan dalam bentuk laporan akhir tentang ${tema}.`
     ],
 
+    "PAIKEM": [
+      `**Memahami:**`,
+      `Guru menciptakan suasana belajar yang aktif, inovatif, kreatif, efektif, dan menyenangkan terkait ${tema} dengan mempersiapkan media pembelajaran, alat dan bahan yang dibutuhkan dalam pembelajaran, murid terlibat dalam pengamatan dan eksplorasi awal.`,
+      `Guru mengajukan pertanyaan pemantik untuk membangun rasa ingin tahu dan berpikir kritis, murid menyampaikan gagasan awal dan mengaitkannya dengan pengalaman sehari-hari.`,
+      `**Mengaplikasi:**`,
+      `Guru memfasilitasi aktivitas kolaboratif (diskusi, eksperimen, permainan edukatif), murid bekerja sama menyusun solusi atau produk terkait ${tema}.`,
+      `Guru membimbing penyusunan karya/presentasi, murid mengekspresikan kreativitas melalui produk/performance yang relevan dengan ${tema}.`,
+      `**Merefleksi:**`,
+      `Guru memandu refleksi proses dan hasil belajar, murid mengemukakan pengalaman, tantangan, dan rencana perbaikan terkait ${tema}.`
+    ],
+
     "Cooperative Learning": [
       `**Memahami:**`,
       `Menyajikan informasi: Guru menggunakan berbagai media dalam menjelaskan konsep atau materi yang akan didiskusikan bersama, murid mendengarkan dan mencatat penjelasan guru yang berhubungan dengan konsep ${tema}.`,

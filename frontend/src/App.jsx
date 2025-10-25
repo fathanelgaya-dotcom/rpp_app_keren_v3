@@ -30,7 +30,7 @@ const PEDAGOGIK_OPTIONS = [
   "Inquiry Learning",
   "PAIKEM",
   "Cooperative Learning",
-  "LOK-R (literasi, orientasi, komunikasi, refleksi)",
+  "LOK-R",
 ];
 
 const COLORS = {
@@ -205,8 +205,52 @@ export default function App() {
       </div>
 
       <h4>Rubrik Penilaian:</h4>
-      <p>Skala: {rpp.rubrik_penilaian?.skala}</p>
-      <ul>{Object.entries(rpp.rubrik_penilaian?.kriteria || {}).map(([k, v]) => <li key={k}><b>{k}</b>: {v}</li>)}</ul>
+      <p style={{ marginTop: -6, marginBottom: 10 }}><i>Instrumen Penilaian Diri</i></p>
+
+      <table
+        style={{
+        width: "100%",
+        borderCollapse: "collapse",
+        marginBottom: "10px",
+        fontSize: "0.95rem"
+        }}
+      >
+      <thead>
+        <tr>
+          <th style={{ border: "1px solid #000", padding: "6px", width: "48px" }}>No</th>
+          <th style={{ border: "1px solid #000", padding: "6px", textAlign: "left" }}>
+            Indikator Penilaian
+          </th>
+          <th style={{ border: "1px solid #000", padding: "6px", textAlign: "center" }} colSpan={4}>
+            Hasil Penilaian Diri
+          </th>
+        </tr>
+        <tr>
+          <th style={{ border: "1px solid #000", padding: "6px" }}></th>
+          <th style={{ border: "1px solid #000", padding: "6px" }}></th>
+          {["1","2","3","4"].map((n) => (
+            <th key={n} style={{ border: "1px solid #000", padding: "6px", width: "52px", textAlign: "center" }}>
+              {n}
+            </th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {(rpp.indikator_tujuan_pembelajaran || []).map((indikator, i) => (
+          <tr key={i}>
+            <td style={{ border: "1px solid #000", padding: "6px", textAlign: "center" }}>{i + 1}</td>
+            <td style={{ border: "1px solid #000", padding: "6px" }}>{indikator}</td>
+            {/* empat kolom skala 1-4 (kosong untuk diisi manual) */}
+            {[0,1,2,3].map((k) => (
+              <td key={k} style={{ border: "1px solid #000", padding: "6px", textAlign: "center" }}>
+            {/* kotak kosong: */}
+            □
+            </td>
+          ))}
+        </tr>
+        ))}
+      </tbody>
+      </table>
 
       <h4>Lembar Kerja:</h4>
       <p><b>Tujuan:</b> {rpp.lembar_kerja?.tujuan}</p>
