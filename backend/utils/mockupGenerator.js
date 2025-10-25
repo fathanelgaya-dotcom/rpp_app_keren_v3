@@ -344,7 +344,6 @@ function isMadrasahTheme() {
   return madrasahKeys.some(k => temaLower.includes(k));
 }
 
-const levelKognitif = detectKognitif(cpLower);
 
 // empty dynamic holders
 let dynamicLingkungan = null;
