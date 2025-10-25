@@ -518,6 +518,10 @@ else if (praktek.includes("lok")) {
   }
 }  
 
+const finalLingkungan = dynamicLingkungan;
+const finalMitra = dynamicMitra;
+const finalDigital = dynamicDigital;
+
   return {
     identitas: {
       Judul: "RPP Integrasi Pembelajaran Mendalam dan KBC",
