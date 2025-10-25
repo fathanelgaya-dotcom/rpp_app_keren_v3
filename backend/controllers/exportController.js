@@ -259,7 +259,7 @@ new Table({
     ),
   ],
 }),
-
+            ],
         // ======================== HALAMAN BARU: LEMBAR KERJA ========================
         {
           properties: {
