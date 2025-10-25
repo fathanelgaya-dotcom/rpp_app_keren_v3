@@ -114,7 +114,6 @@ export function buildMock(payload) {
 
   const langkah = langkahMap[praktekPedagogik] || langkahMap.default;
   
-  const praktek = String(praktekPedagogik || "").toLowerCase();
   const temaLower = String(tema || "").toLowerCase();
   const cpLower = String(cp || "").toLowerCase();
 
