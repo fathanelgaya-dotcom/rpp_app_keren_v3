@@ -345,11 +345,6 @@ function isMadrasahTheme() {
 }
 
 
-// empty dynamic holders
-let dynamicLingkungan = null;
-let dynamicMitra = null;
-let dynamicDigital = null;
-
 // =====================
 // Model-specific logic
 // =====================
