@@ -113,6 +113,53 @@ export function buildMock(payload) {
   };
 
   const langkah = langkahMap[praktekPedagogik] || langkahMap.default;
+  
+  const praktek = String(praktekPedagogik || "").toLowerCase();
+  const temaLower = String(tema || "").toLowerCase();
+  const cpLower   = String(cp || "").toLowerCase();
+
+  // deteksi soft level kognitif dari CP
+  let levelKognitif = "memahami";
+  if (cpLower.includes("menganalisis")) levelKognitif = "menganalisis";
+  else if (cpLower.includes("mengidentifikasi")) levelKognitif = "mengidentifikasi";
+  else if (cpLower.includes("menerapkan")) levelKognitif = "menerapkan";
+  else if (cpLower.includes("mencipta") || cpLower.includes("mengkreasi")) levelKognitif = "mencipta";
+
+  // generate isi dinamis (boleh campur fallback)
+  let dynamicLingkungan = null;
+  let dynamicMitra = null;
+  let dynamicDigital = null;
+
+  if (praktek.includes("inquiry") && temaLower.includes("wujud")) {
+    dynamicLingkungan = [
+      `Lingkungan kelas sebagai ruang eksplorasi awal konsep perubahan wujud benda.`,
+      `Lingkungan nyata melalui observasi langsung fenomena ${tema}.`,
+      `Lingkungan digital berbasis simulasi interaktif untuk ${levelKognitif} proses perubahan wujud benda.`
+    ];
+
+    dynamicMitra = [
+      `Teman sebaya sebagai kolaborator dalam pengujian hipotesis.`,
+      `Narasumber lokal atau sumber belajar kontekstual sesuai fenomena perubahan wujud benda.`,
+      `Komunitas belajar atau kelompok diskusi eksploratif secara terstruktur.`
+    ];
+
+    dynamicDigital = [
+      `Media digital berbasis simulasi interaktif untuk ${levelKognitif} konsep perubahan wujud benda.`,
+      `Literasi digital melalui eksplorasi visual ilmiah dan pengamatan hasil percobaan.`,
+      `Platform pembelajaran daring untuk dokumentasi refleksi dan diskusi investigatif.`
+    ];
+  }
+
+  // siapkan integrasi final (boleh fallback ke nilai default)
+  const finalLingkungan = dynamicLingkungan || [
+    "Lingkungan kelas", "Lingkungan nyata", "Lingkungan digital"
+  ];
+  const finalMitra = dynamicMitra || [
+    "Guru", "Teman sebaya", "Komunitas"
+  ];
+  const finalDigital = dynamicDigital || [
+    "Video", "Slide presentasi", "Laboratorium virtual", "Quiz interaktif"
+  ];  
 
   return {
     identitas: {
@@ -139,9 +186,9 @@ export function buildMock(payload) {
     ],
     materi_insersi_KBC: `Mengimplementasikan ${tema} melalui penerapan ${topikKBC}.`,
     praktek_pedagogik: { model: praktekPedagogik },
-    lingkungan_pembelajaran: ["Lingkungan kelas", "Lingkungan nyata", "Lingkungan digital"],
-    mitra_pembelajaran: ["Guru", "Teman sebaya", "Komunitas"],
-    pemanfaatan_digital: ["Video", "Slide presentasi", "Laboratorium virtual", "Quiz interaktif"],
+    lingkungan_pembelajaran: finalLingkungan,
+    mitra_pembelajaran: finalMitra,
+    pemanfaatan_digital: finalDigital,
     langkah_pembelajaran: langkah,
     pengalaman_murid: ["memahami, mengaplikasi, dan merefleksi"],
     
