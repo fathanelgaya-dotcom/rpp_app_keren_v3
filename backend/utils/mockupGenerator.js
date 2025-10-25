@@ -25,7 +25,7 @@ export function buildMock(payload) {
       `Guru memberikan contoh penerapan konsep ${tema} dalam situasi nyata atau simulasi, murid melakukan kegiatan praktik, eksperimen, atau proyek yang sesuai dengan ${tema}.`,
       `Guru menugaskan murid melakukan kegiatan praktik, eksperimen, atau proyek kecil, murid menggunakan media digital atau alat bantu pembelajaran untuk menerapkan konsep ${tema}.`,
       `Guru membimbing dan memberikan umpan balik selama proses penerapan konsep ${tema}, murid mencatat hasil kegiatan dan mendiskusikan temuan dengan teman atau guru.`,
-      `**Merefleksii:**`,
+      `**Merefleksi:**`,
       `Guru memfasilitasi diskusi reflektif di akhir pembelajaran, murid mengemukakan perasaan dan pengalaman selama proses pembelajaran pada topik ${tema}.`,
       `Guru mengajukan pertanyaan pemantik untuk membantu siswa menghubungkan pengalaman belajar dengan nilai atau sikap yang dikembangkan, murid mengidentifikasi hal-hal yang sudah dan belum dipahami.`,
       `Guru memberikan penguatan terhadap sikap, pengetahuan, dan keterampilan yang sudah dikuasai oleh murid, sedangkan murid menyusun kesimpulan dan membuat rencana perbaikan untuk pembelajaran selanjutnya`
@@ -38,7 +38,7 @@ export function buildMock(payload) {
       `**Mengaplikasi:**`,
       `Penyelidikan: Guru membimbing siswa mencari data, informasi, atau solusi tentang ${tema}, murid melakukan penyelidikan dengan melibatkan lingkungan belajar dan pemanfaatan digital dalam menyelesaikan ${tema}.`,
       `Presentasi: Guru memfasilitasi penyampaian hasil investigasi setiap kelompok, murid melakukan diskusi antar kelompok dan presentasi hasil sesuai tagihan dari ${tema}.`,
-      `**Merefleksii:**`,
+      `**Merefleksi:**`,
       `Refleksi: Guru memberi umpan balik terhadap hasil dan proses pembelajaran, murid menyampaikan perasaan dan pengalaman belajar dan hasil kerja kelompok tentang ${tema}.`
     ],
 
@@ -46,7 +46,7 @@ export function buildMock(payload) {
       `**Memahami:**`,
       `Pendahuluan: Guru mengarahkan murid untuk menemukan ide proyek yang berhubungan dengan ${tema}, murid mengemukakan ide proyek berdasarkan pengalaman dan referensi yang dimiliki tentang ${tema}.`,
       `Perencanaan proyek: Guru membimbing murid membuat rencana kegiatan dan pembagian tugas, murid menyusun rencana kegiatan projek ${tema} berdasarkan ketersediaan alat dan bahan.`,
-      `**Mengaplikasii:**`,
+      `**Mengaplikasi:**`,
       `Pelaksanaan: Guru memantau proses pelaksanaan proyek dan memberikan arahan, murid melaksanakan projek ${tema} sesuai rencana.`,
       `Presentasi: Guru memfasilitasi murid dalam mempresentasikan hasil proyek, murid menyampaikan hasil pengembangan projek ${tema} dan menguji hasilnya.`,
        `**Merefleksi:**`,

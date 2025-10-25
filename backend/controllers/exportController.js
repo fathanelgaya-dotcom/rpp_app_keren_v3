@@ -202,21 +202,63 @@ export const exportWord = async (req, res) => {
               }
             }),
 
-            heading("Rubrik Penilaian"),
-            new Paragraph({
-              text: `Skala: ${rpp.rubrik_penilaian?.skala || ""}`,
-            }),
-            ...(Object.entries(rpp.rubrik_penilaian?.kriteria || {}).map(
-              ([k, v]) =>
-                new Paragraph({
-                  children: [
-                    new TextRun({ text: `${k}: `, bold: true }),
-                    new TextRun({ text: v }),
-                  ],
-                })
-            )),
-          ],
-        },
+            // === R U B R I K   P E N I L A I A N  ===
+heading("Rubrik Penilaian"),
+new Paragraph({
+  text: "Instrumen Penilaian Diri",
+  italics: true,
+  spacing: { after: 200 },
+}),
+// Membuat Tabel Rubrik
+new Table({
+  width: { size: 100, type: "pct" },
+  rows: [
+    // Header Utama
+    new TableRow({
+      children: [
+        new TableCell({
+          children: [new Paragraph({ text: "No", bold: true })],
+          rowSpan: 2,
+        }),
+        new TableCell({
+          children: [new Paragraph({ text: "Indikator Penilaian", bold: true })],
+          rowSpan: 2,
+        }),
+        new TableCell({
+          children: [new Paragraph({ text: "Hasil Penilaian Diri", bold: true, alignment: AlignmentType.CENTER })],
+          columnSpan: 4,
+        }),
+      ],
+    }),
+    // Header Skala 1-4
+    new TableRow({
+      children: ["1", "2", "3", "4"].map(
+        (n) =>
+          new TableCell({
+            children: [new Paragraph({ text: n, alignment: AlignmentType.CENTER })],
+          })
+      ),
+    }),
+    // Body tabel berdasarkan indikator_tujuan_pembelajaran
+    ...(rpp.indikator_tujuan_pembelajaran || []).map((indikator, i) =>
+      new TableRow({
+        children: [
+          new TableCell({
+            children: [new Paragraph({ text: `${i + 1}`, alignment: AlignmentType.CENTER })],
+          }),
+          new TableCell({
+            children: [new Paragraph({ text: indikator })],
+          }),
+          ...[1, 2, 3, 4].map(() =>
+            new TableCell({
+              children: [new Paragraph({ text: "" })],
+            })
+          ),
+        ],
+      })
+    ),
+  ],
+}),
 
         // ======================== HALAMAN BARU: LEMBAR KERJA ========================
         {
