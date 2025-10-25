@@ -321,18 +321,6 @@ else if (praktek.includes("lok")) {
   }
 }
 
-// helper: detect cognitive verb roughly
-function detectKognitif(text) {
-  const t = String(text || "").toLowerCase();
-  if (/\bmenganalisis\b/.test(t) || /\banalysis\b/.test(t)) return "menganalisis";
-  if (/\bmengidentifikasi\b/.test(t) || /\bidentif/i.test(t)) return "mengidentifikasi";
-  if (/\bmenerapkan\b/.test(t) || /\bmengaplikasikan\b/.test(t)) return "menerapkan";
-  if (/\bmencipta\b/.test(t) || /\bmengkreasi\b/.test(t) || /\bcreate\b/.test(t)) return "mencipta";
-  if (/\bmenginterpretasi\b/.test(t) || /\binterpret/i.test(t)) return "menginterpretasi";
-  // default
-  return "memahami";
-}
-
 // helper: theme categories
 function isTema(...keywords) {
   return keywords.some(k => temaLower.includes(k));
@@ -517,6 +505,44 @@ else if (praktek.includes("lok")) {
     ];
   }
 }  
+
+// === Pembelajaran Mendalam (default) — reflektif elegan untuk SEMUA tema ===
+else if (praktek.includes("mendalam")) {
+  dynamicLingkungan = [
+    `Lingkungan belajar yang mendorong perenungan makna mendalam dari konsep ${tema} dan relevansinya dengan kehidupan.`,
+    `Lingkungan nyata atau pengalaman kontekstual yang memungkinkan murid menghubungkan ${tema} dengan realitas sosial, emosional, atau spiritual.`,
+    `Lingkungan digital untuk eksplorasi pemaknaan konseptual dan refleksi mandiri terhadap ${tema}.`
+  ];
+  dynamicMitra = [
+    `Teman sebaya sebagai mitra dialog reflektif untuk menggali makna terdalam dari ${tema}.`,
+    `Sumber inspiratif (bacaan, kisah, atau fenomena nyata) yang memperkaya pemahaman kritis dan nilai ${tema}.`,
+    `Komunitas belajar atau lingkungan sosial yang relevan sebagai cermin perubahan sikap terhadap ${tema}.`
+  ];
+  dynamicDigital = [
+    `Media reflektif digital untuk mengeksplorasi perspektif yang lebih luas terhadap ${tema}.`,
+    `Ruang dokumentasi pengalaman belajar untuk mencatat pemahaman personal dan transformasi diri.`,
+    `Platform pembelajaran daring untuk memperdalam penalaran dan refleksi terhadap konteks ${tema}.`
+  ];
+}
+
+// === Perkuat deteksi PAIKEM agar fleksibel (case-insensitive elegan) ===
+else if (praktek.includes("paikem")) {
+  dynamicLingkungan = [
+    `Lingkungan belajar yang aktif dan elegan untuk mengeksplorasi ide ${tema} secara kreatif dan kritis.`,
+    `Lingkungan nyata sebagai sumber inspirasi pengalaman pembelajaran langsung terkait ${tema}.`,
+    `Lingkungan digital untuk mengembangkan kreativitas, elaborasi ide, dan kolaborasi inovatif terkait ${tema}.`
+  ];
+  dynamicMitra = [
+    `Teman sebaya sebagai kolaborator untuk merancang ide dan menyampaikan gagasan secara menarik.`,
+    `Sumber inspiratif (visual, literasi, atau fenomena nyata) untuk memperkaya kreativitas terhadap ${tema}.`,
+    `Komunitas pembelajaran atau narasumber kontekstual sebagai penguat relevansi ide ${tema}.`
+  ];
+  dynamicDigital = [
+    `Media interaktif untuk memfasilitasi elaborasi ide dan ekspresi kreatif murid terkait ${tema}.`,
+    `Platform eksplorasi digital untuk menemukan inspirasi dan solusi inovatif terhadap ${tema}.`,
+    `Ruang dokumentasi digital untuk menampilkan karya reflektif dan impresif tentang ${tema}.`
+  ];
+}
 
 const finalLingkungan = dynamicLingkungan;
 const finalMitra = dynamicMitra;
