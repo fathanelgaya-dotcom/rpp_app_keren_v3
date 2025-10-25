@@ -113,8 +113,10 @@ export function buildMock(payload) {
   };
 
   const langkah = langkahMap[praktekPedagogik] || langkahMap.default;
-  
+  const praktek = String(praktekPedagogik || "").toLowerCase();
+  const temaLower = String(tema || "").toLowerCase();
   const cpLower = String(cp || "").toLowerCase();
+  
 
 // helper: detect cognitive verb roughly
 function detectKognitif(text) {
@@ -318,9 +320,6 @@ else if (praktek.includes("lok")) {
     ];
   }
 }
-const praktek = String(praktekPedagogik || "").toLowerCase();
-const temaLower = String(tema || "").toLowerCase();
-const cpLower = String(cp || "").toLowerCase();
 
 // helper: detect cognitive verb roughly
 function detectKognitif(text) {
