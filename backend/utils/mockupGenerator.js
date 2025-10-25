@@ -114,7 +114,6 @@ export function buildMock(payload) {
 
   const langkah = langkahMap[praktekPedagogik] || langkahMap.default;
   
-  const temaLower = String(tema || "").toLowerCase();
   const cpLower = String(cp || "").toLowerCase();
 
 // helper: detect cognitive verb roughly
