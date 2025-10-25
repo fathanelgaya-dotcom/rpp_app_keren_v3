@@ -116,50 +116,416 @@ export function buildMock(payload) {
   
   const praktek = String(praktekPedagogik || "").toLowerCase();
   const temaLower = String(tema || "").toLowerCase();
-  const cpLower   = String(cp || "").toLowerCase();
+  const cpLower = String(cp || "").toLowerCase();
 
-  // deteksi soft level kognitif dari CP
-  let levelKognitif = "memahami";
-  if (cpLower.includes("menganalisis")) levelKognitif = "menganalisis";
-  else if (cpLower.includes("mengidentifikasi")) levelKognitif = "mengidentifikasi";
-  else if (cpLower.includes("menerapkan")) levelKognitif = "menerapkan";
-  else if (cpLower.includes("mencipta") || cpLower.includes("mengkreasi")) levelKognitif = "mencipta";
+// helper: detect cognitive verb roughly
+function detectKognitif(text) {
+  const t = String(text || "").toLowerCase();
+  if (/\bmenganalisis\b/.test(t) || /\banalysis\b/.test(t)) return "menganalisis";
+  if (/\bmengidentifikasi\b/.test(t) || /\bidentif/i.test(t)) return "mengidentifikasi";
+  if (/\bmenerapkan\b/.test(t) || /\bmengaplikasikan\b/.test(t)) return "menerapkan";
+  if (/\bmencipta\b/.test(t) || /\bmengkreasi\b/.test(t) || /\bcreate\b/.test(t)) return "mencipta";
+  if (/\bmenginterpretasi\b/.test(t) || /\binterpret/i.test(t)) return "menginterpretasi";
+  // default
+  return "memahami";
+}
 
-  // generate isi dinamis (boleh campur fallback)
-  let dynamicLingkungan = null;
-  let dynamicMitra = null;
-  let dynamicDigital = null;
+// helper: theme categories
+function isTema(...keywords) {
+  return keywords.some(k => temaLower.includes(k));
+}
 
-  if (praktek.includes("inquiry") && temaLower.includes("wujud")) {
+// helper: detect madrasah-religious themes
+function isMadrasahTheme() {
+  const madrasahKeys = ["wudhu", "shalat", "sholat", "zakat", "puasa", "quran", "alquran", "tajwid", "akhlak", "iman", "ibadah", "adab", "dzikir"];
+  return madrasahKeys.some(k => temaLower.includes(k));
+}
+
+const levelKognitif = detectKognitif(cpLower);
+
+// empty dynamic holders
+let dynamicLingkungan = null;
+let dynamicMitra = null;
+let dynamicDigital = null;
+
+// =====================
+// Model-specific logic
+// =====================
+
+// INQUIRY (suitable for investigative/explorative themes)
+if (praktek.includes("inquiry") || praktek.includes("inQUIRY".toLowerCase())) {
+  // broadened theme matches for scientific/investigative topics
+  if (isTema("wujud", "benda", "materi", "energi", "perubahan", "reaksi", "sifat", "ekosistem", "lingkungan")) {
     dynamicLingkungan = [
-      `Lingkungan kelas sebagai ruang eksplorasi awal konsep perubahan wujud benda.`,
-      `Lingkungan nyata melalui observasi langsung fenomena ${tema}.`,
-      `Lingkungan digital berbasis simulasi interaktif untuk ${levelKognitif} proses perubahan wujud benda.`
+      `Lingkungan kelas sebagai ruang eksplorasi awal konsep dan diskusi hipotesis.`,
+      `Lingkungan nyata melalui observasi langsung fenomena terkait ${tema}.`,
+      `Lingkungan digital berbasis simulasi interaktif untuk ${levelKognitif} fenomena ${tema}.`
     ];
-
     dynamicMitra = [
-      `Teman sebaya sebagai kolaborator dalam pengujian hipotesis.`,
-      `Narasumber lokal atau sumber belajar kontekstual sesuai fenomena perubahan wujud benda.`,
-      `Komunitas belajar atau kelompok diskusi eksploratif secara terstruktur.`
+      `Teman sebaya sebagai kolaborator dalam pengujian hipotesis dan eksperimen kecil.`,
+      `Sumber belajar kontekstual (buku, modul eksperimen sederhana, bahan ajar terverifikasi).`,
+      `Kelompok diskusi untuk refleksi dan validasi temuan.`
     ];
-
     dynamicDigital = [
-      `Media digital berbasis simulasi interaktif untuk ${levelKognitif} konsep perubahan wujud benda.`,
-      `Literasi digital melalui eksplorasi visual ilmiah dan pengamatan hasil percobaan.`,
-      `Platform pembelajaran daring untuk dokumentasi refleksi dan diskusi investigatif.`
+      `Simulasi digital interaktif untuk mencoba variasi percobaan dan melihat hasil hipotesis.`,
+      `Visualisasi ilmiah dan literasi data untuk menganalisis hasil pengamatan.`,
+      `Ruang diskusi daring untuk dokumentasi refleksi dan pembandingan temuan.`
+    ];
+  } else if (isMadrasahTheme()) {
+    // inquiry applied to religious/madrasah topics: reflective / experiential inquiry
+    dynamicLingkungan = [
+      `Lingkungan kelas sebagai ruang dialog dan kajian teks keagamaan.`,
+      `Lingkungan nyata melalui praktik ritual/ibadah atau observasi nilai-nilai adab dalam kehidupan sehari-hari.`,
+      `Lingkungan digital untuk eksplorasi teks, dokumentasi pengalaman, dan refleksi bersama.`
+    ];
+    dynamicMitra = [
+      `Teman sebaya untuk diskusi kelompok dan praktik simulasi ritual/ibadah.`,
+      `Sumber rujukan keagamaan yang terpercaya (kitab, penjelasan singkat, modul pembelajaran).`,
+      `Komunitas atau tokoh lokal sebagai sumber pengalaman kontekstual.`
+    ];
+    dynamicDigital = [
+      `Media pembelajaran digital untuk studi teks dan refleksi terstruktur.`,
+      `Visualisasi proses ibadah/ritual untuk observasi dan perbaikan praktik.`,
+      `Platform dokumentasi untuk menyimpan refleksi dan evidensi pembelajaran.`
+    ];
+  } else {
+    // generic inquiry fallback
+    dynamicLingkungan = [
+      `Lingkungan kelas sebagai ruang tanya jawab dan eksplorasi konsep.`,
+      `Lingkungan nyata sesuai konteks tema untuk observasi langsung.`,
+      `Lingkungan digital untuk eksperimen virtual dan dokumentasi.`
+    ];
+    dynamicMitra = [
+      `Teman sebaya untuk kerja kolaboratif dan uji hipotesis.`,
+      `Sumber belajar relevan untuk referensi dan banding hasil.`,
+      `Kelompok diskusi untuk refleksi hasil pembelajaran.`
+    ];
+    dynamicDigital = [
+      `Sumber multimedia untuk pengayaan dan visualisasi konsep.`,
+      `Simulasi dasar untuk memperlihatkan fenomena yang sulit diamati langsung.`,
+      `Ruang kolaborasi daring untuk berbagi hasil dan refleksi.`
     ];
   }
+}
 
-  // siapkan integrasi final (boleh fallback ke nilai default)
-  const finalLingkungan = dynamicLingkungan || [
-    "Lingkungan kelas", "Lingkungan nyata", "Lingkungan digital"
+// PBL (Problem Based Learning)
+else if (praktek.includes("problem") || praktek.includes("pbl")) {
+  dynamicLingkungan = [
+    `Lingkungan nyata yang relevan dengan masalah kontekstual tema ${tema}.`,
+    `Lingkungan kelas sebagai pusat perencanaan dan evaluasi solusi.`,
+    `Lingkungan digital untuk riset, pengumpulan bukti, dan presentasi solusi.`
   ];
-  const finalMitra = dynamicMitra || [
-    "Guru", "Teman sebaya", "Komunitas"
+  dynamicMitra = [
+    `Kelompok sebaya sebagai tim pemecahan masalah.`,
+    `Mitra eksternal sesuai masalah (komunitas, industri, atau praktisi lokal).`,
+    `Sumber data dan referensi untuk analisis masalah.` 
   ];
-  const finalDigital = dynamicDigital || [
-    "Video", "Slide presentasi", "Laboratorium virtual", "Quiz interaktif"
-  ];  
+  dynamicDigital = [
+    `Media dokumentasi dan presentasi hasil solusi.`,
+    `Alat bantu analisis sederhana dan literatur daring untuk riset.`,
+    `Platform kolaborasi untuk manajemen tugas tim.` 
+  ];
+}
+
+// Project Based Learning (PjBL)
+else if (praktek.includes("project") || praktek.includes("pjbl") || praktek.includes("pjbl".toLowerCase())) {
+  dynamicLingkungan = [
+    `Lingkungan nyata untuk pelaksanaan proyek dan pengujian produk.`,
+    `Lingkungan kelas sebagai ruang perencanaan, prototyping, dan presentasi.`,
+    `Lingkungan digital untuk dokumentasi proyek dan kolaborasi jarak jauh.`
+  ];
+  dynamicMitra = [
+    `Rekan kelompok sebagai kolaborator berperan pada setiap fase proyek.`,
+    `Mitra komunitas atau eksternal yang relevan dengan tujuan proyek.`,
+    `Sumber bahan dan dokumentasi teknis untuk pengembangan produk.` 
+  ];
+  dynamicDigital = [
+    `Alat dokumentasi digital untuk merekam proses dan hasil proyek.`,
+    `Platform kolaborasi daring untuk pembagian tugas dan revisi karya.`,
+    `Sumber referensi digital untuk pengayaan proyek.` 
+  ];
+}
+
+// Discovery Learning
+else if (praktek.includes("discovery")) {
+  dynamicLingkungan = [
+    `Lingkungan kelas untuk stimulasi awal dan kegiatan pemecahan masalah.`,
+    `Lingkungan nyata untuk eksplorasi dan pengumpulan data lapangan.`,
+    `Lingkungan digital sebagai pendukung riset mandiri dan presentasi temuan.`
+  ];
+  dynamicMitra = [
+    `Teman sebaya untuk kolaborasi penemuan dan diskusi ide.`,
+    `Sumber eksperimen sederhana untuk pembuktian temuan.`,
+    `Kelompok refleksi untuk verifikasi dan generalisasi hasil.` 
+  ];
+  dynamicDigital = [
+    `Sumber multimedia untuk memicu rasa ingin tahu dan eksplorasi.`,
+    `Simulasi yang memungkinkan penemuan pola secara mandiri.`,
+    `Platform dokumentasi untuk menyusun laporan penemuan.` 
+  ];
+}
+
+// Cooperative Learning
+else if (praktek.includes("cooperative")) {
+  dynamicLingkungan = [
+    `Lingkungan kelas yang diorganisir untuk kerja kelompok terstruktur.`,
+    `Lingkungan nyata untuk pertukaran peran dan pembelajaran kontekstual.`,
+    `Lingkungan digital untuk koordinasi dan pengiriman tugas kelompok.` 
+  ];
+  dynamicMitra = [
+    `Teman sebaya sebagai rekan belajar dalam struktur kelompok.`,
+    `Pengelola komunitas atau fasilitator eksternal saat diperlukan.`,
+    `Sumber referensi untuk tugas kolaboratif.` 
+  ];
+  dynamicDigital = [
+    `Ruang kolaborasi daring untuk koordinasi dan refleksi kelompok.`,
+    `Media presentasi digital untuk menampilkan hasil kerja bersama.`,
+    `Sumber pembelajaran berbasis tugas untuk pengayaan materi.` 
+  ];
+}
+
+// LOK-R (Literasi, Orientasi, Komunikasi, Refleksi)
+else if (praktek.includes("lok")) {
+  if (isMadrasahTheme()) {
+    dynamicLingkungan = [
+      `Lingkungan kelas untuk pengembangan literasi keagamaan dan orientasi nilai.`,
+      `Lingkungan nyata melalui praktik kehidupan beriman dan adab sehari-hari.`,
+      `Lingkungan digital untuk akses teks dan sumber rujukan keagamaan.` 
+    ];
+    dynamicMitra = [
+      `Teman sebaya untuk diskusi reflektif dan pembacaan teks.`,
+      `Sumber kontekstual (kitab/terjemah/sumber rujukan) untuk kajian literasi.`,
+      `Kelompok kajian untuk praktik komunikasi dan refleksi nilai.` 
+    ];
+    dynamicDigital = [
+      `Platform literasi digital untuk mengakses teks dan penjelasan ilmiah.`,
+      `Visualisasi materi keagamaan untuk memahami praktik dan konteksnya.`,
+      `Ruang dokumentasi refleksi keagamaan.` 
+    ];
+  } else {
+    dynamicLingkungan = [
+      `Lingkungan kelas untuk pengembangan literasi dan diskusi awal konsep.`,
+      `Lingkungan nyata untuk praktik orientasi terhadap fenomena lokal.`,
+      `Lingkungan digital untuk mendukung kegiatan literasi dan komunikasi.` 
+    ];
+    dynamicMitra = [
+      `Teman sebaya untuk kolaborasi literasi dan komunikasi.`,
+      `Sumber rujukan relevan untuk pengayaan materi.`,
+      `Kelompok kecil untuk praktik komunikasi dan refleksi.` 
+    ];
+    dynamicDigital = [
+      `Sumber teks digital untuk pembelajaran literasi.`,
+      `Media presentasi untuk komunikasi gagasan.`,
+      `Ruang diskusi daring untuk umpan balik.`
+    ];
+  }
+}
+const praktek = String(praktekPedagogik || "").toLowerCase();
+const temaLower = String(tema || "").toLowerCase();
+const cpLower = String(cp || "").toLowerCase();
+
+// helper: detect cognitive verb roughly
+function detectKognitif(text) {
+  const t = String(text || "").toLowerCase();
+  if (/\bmenganalisis\b/.test(t) || /\banalysis\b/.test(t)) return "menganalisis";
+  if (/\bmengidentifikasi\b/.test(t) || /\bidentif/i.test(t)) return "mengidentifikasi";
+  if (/\bmenerapkan\b/.test(t) || /\bmengaplikasikan\b/.test(t)) return "menerapkan";
+  if (/\bmencipta\b/.test(t) || /\bmengkreasi\b/.test(t) || /\bcreate\b/.test(t)) return "mencipta";
+  if (/\bmenginterpretasi\b/.test(t) || /\binterpret/i.test(t)) return "menginterpretasi";
+  // default
+  return "memahami";
+}
+
+// helper: theme categories
+function isTema(...keywords) {
+  return keywords.some(k => temaLower.includes(k));
+}
+
+// helper: detect madrasah-religious themes
+function isMadrasahTheme() {
+  const madrasahKeys = ["wudhu", "shalat", "sholat", "zakat", "puasa", "quran", "alquran", "tajwid", "akhlak", "iman", "ibadah", "adab", "dzikir"];
+  return madrasahKeys.some(k => temaLower.includes(k));
+}
+
+const levelKognitif = detectKognitif(cpLower);
+
+// empty dynamic holders
+let dynamicLingkungan = null;
+let dynamicMitra = null;
+let dynamicDigital = null;
+
+// =====================
+// Model-specific logic
+// =====================
+
+// INQUIRY (suitable for investigative/explorative themes)
+if (praktek.includes("inquiry") || praktek.includes("inQUIRY".toLowerCase())) {
+  // broadened theme matches for scientific/investigative topics
+  if (isTema("wujud", "benda", "materi", "energi", "perubahan", "reaksi", "sifat", "ekosistem", "lingkungan")) {
+    dynamicLingkungan = [
+      `Lingkungan kelas sebagai ruang eksplorasi awal konsep dan diskusi hipotesis.`,
+      `Lingkungan nyata melalui observasi langsung fenomena terkait ${tema}.`,
+      `Lingkungan digital berbasis simulasi interaktif untuk ${levelKognitif} fenomena ${tema}.`
+    ];
+    dynamicMitra = [
+      `Teman sebaya sebagai kolaborator dalam pengujian hipotesis dan eksperimen kecil.`,
+      `Sumber belajar kontekstual (buku, modul eksperimen sederhana, bahan ajar terverifikasi).`,
+      `Kelompok diskusi untuk refleksi dan validasi temuan.`
+    ];
+    dynamicDigital = [
+      `Simulasi digital interaktif untuk mencoba variasi percobaan dan melihat hasil hipotesis.`,
+      `Visualisasi ilmiah dan literasi data untuk menganalisis hasil pengamatan.`,
+      `Ruang diskusi daring untuk dokumentasi refleksi dan pembandingan temuan.`
+    ];
+  } else if (isMadrasahTheme()) {
+    // inquiry applied to religious/madrasah topics: reflective / experiential inquiry
+    dynamicLingkungan = [
+      `Lingkungan kelas sebagai ruang dialog dan kajian teks keagamaan.`,
+      `Lingkungan nyata melalui praktik ritual/ibadah atau observasi nilai-nilai adab dalam kehidupan sehari-hari.`,
+      `Lingkungan digital untuk eksplorasi teks, dokumentasi pengalaman, dan refleksi bersama.`
+    ];
+    dynamicMitra = [
+      `Teman sebaya untuk diskusi kelompok dan praktik simulasi ritual/ibadah.`,
+      `Sumber rujukan keagamaan yang terpercaya (kitab, penjelasan singkat, modul pembelajaran).`,
+      `Komunitas atau tokoh lokal sebagai sumber pengalaman kontekstual.`
+    ];
+    dynamicDigital = [
+      `Media pembelajaran digital untuk studi teks dan refleksi terstruktur.`,
+      `Visualisasi proses ibadah/ritual untuk observasi dan perbaikan praktik.`,
+      `Platform dokumentasi untuk menyimpan refleksi dan evidensi pembelajaran.`
+    ];
+  } else {
+    // generic inquiry fallback
+    dynamicLingkungan = [
+      `Lingkungan kelas sebagai ruang tanya jawab dan eksplorasi konsep.`,
+      `Lingkungan nyata sesuai konteks tema untuk observasi langsung.`,
+      `Lingkungan digital untuk eksperimen virtual dan dokumentasi.`
+    ];
+    dynamicMitra = [
+      `Teman sebaya untuk kerja kolaboratif dan uji hipotesis.`,
+      `Sumber belajar relevan untuk referensi dan banding hasil.`,
+      `Kelompok diskusi untuk refleksi hasil pembelajaran.`
+    ];
+    dynamicDigital = [
+      `Sumber multimedia untuk pengayaan dan visualisasi konsep.`,
+      `Simulasi dasar untuk memperlihatkan fenomena yang sulit diamati langsung.`,
+      `Ruang kolaborasi daring untuk berbagi hasil dan refleksi.`
+    ];
+  }
+}
+
+// PBL (Problem Based Learning)
+else if (praktek.includes("problem") || praktek.includes("pbl")) {
+  dynamicLingkungan = [
+    `Lingkungan nyata yang relevan dengan masalah kontekstual tema ${tema}.`,
+    `Lingkungan kelas sebagai pusat perencanaan dan evaluasi solusi.`,
+    `Lingkungan digital untuk riset, pengumpulan bukti, dan presentasi solusi.`
+  ];
+  dynamicMitra = [
+    `Kelompok sebaya sebagai tim pemecahan masalah.`,
+    `Mitra eksternal sesuai masalah (komunitas, industri, atau praktisi lokal).`,
+    `Sumber data dan referensi untuk analisis masalah.` 
+  ];
+  dynamicDigital = [
+    `Media dokumentasi dan presentasi hasil solusi.`,
+    `Alat bantu analisis sederhana dan literatur daring untuk riset.`,
+    `Platform kolaborasi untuk manajemen tugas tim.` 
+  ];
+}
+
+// Project Based Learning (PjBL)
+else if (praktek.includes("project") || praktek.includes("pjbl") || praktek.includes("pjbl".toLowerCase())) {
+  dynamicLingkungan = [
+    `Lingkungan nyata untuk pelaksanaan proyek dan pengujian produk.`,
+    `Lingkungan kelas sebagai ruang perencanaan, prototyping, dan presentasi.`,
+    `Lingkungan digital untuk dokumentasi proyek dan kolaborasi jarak jauh.`
+  ];
+  dynamicMitra = [
+    `Rekan kelompok sebagai kolaborator berperan pada setiap fase proyek.`,
+    `Mitra komunitas atau eksternal yang relevan dengan tujuan proyek.`,
+    `Sumber bahan dan dokumentasi teknis untuk pengembangan produk.` 
+  ];
+  dynamicDigital = [
+    `Alat dokumentasi digital untuk merekam proses dan hasil proyek.`,
+    `Platform kolaborasi daring untuk pembagian tugas dan revisi karya.`,
+    `Sumber referensi digital untuk pengayaan proyek.` 
+  ];
+}
+
+// Discovery Learning
+else if (praktek.includes("discovery")) {
+  dynamicLingkungan = [
+    `Lingkungan kelas untuk stimulasi awal dan kegiatan pemecahan masalah.`,
+    `Lingkungan nyata untuk eksplorasi dan pengumpulan data lapangan.`,
+    `Lingkungan digital sebagai pendukung riset mandiri dan presentasi temuan.`
+  ];
+  dynamicMitra = [
+    `Teman sebaya untuk kolaborasi penemuan dan diskusi ide.`,
+    `Sumber eksperimen sederhana untuk pembuktian temuan.`,
+    `Kelompok refleksi untuk verifikasi dan generalisasi hasil.` 
+  ];
+  dynamicDigital = [
+    `Sumber multimedia untuk memicu rasa ingin tahu dan eksplorasi.`,
+    `Simulasi yang memungkinkan penemuan pola secara mandiri.`,
+    `Platform dokumentasi untuk menyusun laporan penemuan.` 
+  ];
+}
+
+// Cooperative Learning
+else if (praktek.includes("cooperative")) {
+  dynamicLingkungan = [
+    `Lingkungan kelas yang diorganisir untuk kerja kelompok terstruktur.`,
+    `Lingkungan nyata untuk pertukaran peran dan pembelajaran kontekstual.`,
+    `Lingkungan digital untuk koordinasi dan pengiriman tugas kelompok.` 
+  ];
+  dynamicMitra = [
+    `Teman sebaya sebagai rekan belajar dalam struktur kelompok.`,
+    `Pengelola komunitas atau fasilitator eksternal saat diperlukan.`,
+    `Sumber referensi untuk tugas kolaboratif.` 
+  ];
+  dynamicDigital = [
+    `Ruang kolaborasi daring untuk koordinasi dan refleksi kelompok.`,
+    `Media presentasi digital untuk menampilkan hasil kerja bersama.`,
+    `Sumber pembelajaran berbasis tugas untuk pengayaan materi.` 
+  ];
+}
+
+// LOK-R (Literasi, Orientasi, Komunikasi, Refleksi)
+else if (praktek.includes("lok")) {
+  if (isMadrasahTheme()) {
+    dynamicLingkungan = [
+      `Lingkungan kelas untuk pengembangan literasi keagamaan dan orientasi nilai.`,
+      `Lingkungan nyata melalui praktik kehidupan beriman dan adab sehari-hari.`,
+      `Lingkungan digital untuk akses teks dan sumber rujukan keagamaan.` 
+    ];
+    dynamicMitra = [
+      `Teman sebaya untuk diskusi reflektif dan pembacaan teks.`,
+      `Sumber kontekstual (kitab/terjemah/sumber rujukan) untuk kajian literasi.`,
+      `Kelompok kajian untuk praktik komunikasi dan refleksi nilai.` 
+    ];
+    dynamicDigital = [
+      `Platform literasi digital untuk mengakses teks dan penjelasan ilmiah.`,
+      `Visualisasi materi keagamaan untuk memahami praktik dan konteksnya.`,
+      `Ruang dokumentasi refleksi keagamaan.` 
+    ];
+  } else {
+    dynamicLingkungan = [
+      `Lingkungan kelas untuk pengembangan literasi dan diskusi awal konsep.`,
+      `Lingkungan nyata untuk praktik orientasi terhadap fenomena lokal.`,
+      `Lingkungan digital untuk mendukung kegiatan literasi dan komunikasi.` 
+    ];
+    dynamicMitra = [
+      `Teman sebaya untuk kolaborasi literasi dan komunikasi.`,
+      `Sumber rujukan relevan untuk pengayaan materi.`,
+      `Kelompok kecil untuk praktik komunikasi dan refleksi.` 
+    ];
+    dynamicDigital = [
+      `Sumber teks digital untuk pembelajaran literasi.`,
+      `Media presentasi untuk komunikasi gagasan.`,
+      `Ruang diskusi daring untuk umpan balik.`
+    ];
+  }
+}  
 
   return {
     identitas: {
