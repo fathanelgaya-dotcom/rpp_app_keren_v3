@@ -170,7 +170,7 @@ export default function App() {
 
       <h4>Kegiatan Inti:</h4>
       <div style={{ marginLeft: "10px", lineHeight: 1.7 }}>
-        {rpp.langkah_pembelajaran?.map((x, i) => {
+        {rpp.kegiatan_inti?.map((x, i) => {
           if (x.startsWith("**")) {
             return (
               <div
