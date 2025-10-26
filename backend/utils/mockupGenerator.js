@@ -576,7 +576,23 @@ const finalDigital = dynamicDigital;
     lingkungan_pembelajaran: finalLingkungan,
     mitra_pembelajaran: finalMitra,
     pemanfaatan_digital: finalDigital,
-    langkah_pembelajaran: langkah,
+    kegiatan_pembuka: [
+      "Guru mengucapkan salam kepada peserta didik.",
+      "Guru mengajak peserta didik berdoa bersama sesuai agama dan keyakinan masing-masing.",
+      "Guru melakukan presensi dan memastikan kesiapan belajar murid.",
+      "Guru menyampaikan tujuan pembelajaran secara jelas dan eksplisit.",
+      "Guru memberikan motivasi awal agar murid menyadari makna dan urgensi pembelajaran hari ini.",
+      "Guru melakukan ice breaking ringan yang relevan untuk menciptakan suasana belajar yang positif."
+    ],
+    kegiatan_inti: langkah,
+    kegiatan_penutup: [
+      "Guru membimbing peserta didik melakukan refleksi terhadap pembelajaran hari ini.",
+      "Guru meminta peserta didik menyampaikan kesimpulan atau pemahaman inti yang diperoleh.",
+      "Guru memberikan apresiasi dan penguatan atas proses belajar yang berlangsung.",
+      "Guru menyampaikan tindak lanjut atau pengayaan untuk pembelajaran berikutnya.",
+      "Guru mengajak peserta didik berdoa penutup sesuai agama dan keyakinan masing-masing.",
+      "Guru menutup pembelajaran dengan salam penutup."
+    ],
     pengalaman_murid: ["memahami, mengaplikasi, dan merefleksi"],
     
     asesmen_formatif: {

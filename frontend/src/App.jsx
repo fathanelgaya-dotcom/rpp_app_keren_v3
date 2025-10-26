@@ -162,8 +162,13 @@ export default function App() {
 
       <h4>Pemanfaatan Digital:</h4>
       <ul>{rpp.pemanfaatan_digital?.map((x, i) => <li key={i}>{x}</li>)}</ul>
+      
+      <h4>Kegiatan Pendahuluan:</h4>
+      <ul>
+         {(rpp.kegiatan_pembuka || []).map((x, i) => <li key={i}>{x}</li>)}
+      </ul>
 
-      <h4>Langkah Pembelajaran:</h4>
+      <h4>Kegiatan Inti:</h4>
       <div style={{ marginLeft: "10px", lineHeight: 1.7 }}>
         {rpp.langkah_pembelajaran?.map((x, i) => {
           if (x.startsWith("**")) {
@@ -186,6 +191,11 @@ export default function App() {
           );
         })}
       </div>
+
+      <h4>Kegiatan Penutup:</h4>
+      <ul>
+         {(rpp.kegiatan_penutup || []).map((x, i) => <li key={i}>{x}</li>)}
+      </ul>
 
       <h4>Pengalaman Murid:</h4>
       <ul>{Object.entries(rpp.pengalaman_murid || {}).map(([k, v]) => <li key={k}><b>{k}</b>: {v}</li>)}</ul>

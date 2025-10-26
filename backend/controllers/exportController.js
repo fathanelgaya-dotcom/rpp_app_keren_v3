@@ -154,8 +154,12 @@ export const exportWord = async (req, res) => {
               (x) => new Paragraph({ text: x, bullet: { level: 0 } })
             ),
 
-            heading("Langkah Pembelajaran"),
-            ...(rpp.langkah_pembelajaran || []).map((x) =>
+            heading("Kegiatan Pendahuluan"),
+                             ...(rpp.kegiatan_pembuka || []).map(
+                                  (x) => new Paragraph({ text: x, bullet: { level: 0 } })
+                             ),
+            heading("Kegiatan Inti"),
+            ...(rpp.kegiatan_inti || []).map((x) =>
               x.startsWith("**")
                 ? new Paragraph({
                     text: x.replace(/\*\*/g, ""),
@@ -167,6 +171,11 @@ export const exportWord = async (req, res) => {
                     bullet: { level: 0 },
                   })
             ),
+
+            heading("Kegiatan Penutup"),
+                             ...(rpp.kegiatan_penutup || []).map(
+                                  (x) => new Paragraph({ text: x, bullet: { level: 0 } })
+                             ),
 
             heading("Pengalaman Murid"),
             ...Object.entries(rpp.pengalaman_murid || {}).map(
