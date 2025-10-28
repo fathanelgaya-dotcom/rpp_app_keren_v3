@@ -625,3 +625,5 @@ const finalDigital = dynamicDigital;
       .map((x) => `Keterlibatan dalam kegiatan: ${x}`)
   }
 }
+};
+}
