@@ -623,10 +623,13 @@ const finalDigital = dynamicDigital;
      indikator: langkah
       .filter((x) => !x.startsWith("**"))
       .map((x) => {
-        let clean = x.replace(/\*\*/g, "").trim();
-        let parts = clean.split(":").map(s => s.trim());
-        let titleOnly = parts.slice(0, 2).join(": "); // hanya ambil 2 segmen pertama
-        return `Keterlibatan dalam kegiatan: ${titleOnly}`;
+        let clean = x.replace(/\*\*/g, "").trim(); // hilangkan dekorasi model seperti **Memahami:**
+    
+        // Ambil hanya inti fase sebelum narasi guru/murid dimulai
+        // Logika: bagian sebelum KALIMAT MULAI (guru/murid/verb panjang)
+        let fase = clean.split(/,| murid | guru /i)[0].trim();
+
+        return `Keterlibatan dalam kegiatan: ${fase}`;
       }),
   },
 
