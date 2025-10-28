@@ -609,18 +609,19 @@ const finalDigital = dynamicDigital;
       kriteria: { 4: "Sangat baik", 3: "Baik", 2: "Cukup", 1: "Kurang" }
     },
     lembar_kerja: {
-      tujuan: `Memastikan target ketercapaian ${cp}`,
-      tugas: `Kerjakan soal/tugas dengan ${profilLulusan}`,
-      urutan_kerja: "Catatlah setiap tahapan kegiatan pembelajaran yang kamu lakukan, berilah penanda pada poin penting yang dicapai", 
-      rubrik: {
-        tabel_penilaian_diri: {
-          instruksi: `Isilah tabel penilaian diri berikut berdasarkan keterlibatan Anda dalam setiap tahapan kegiatan pada *Kegiatan Inti*, gunakan skala 1–4 secara jujur.`,
-          skala: "1-4",
-          indikator: langkah
-            .filter((x) => !x.startsWith("**"))
-            .map((x, i) => `Keterlibatan dalam kegiatan: ${x}`)
-        }
-      }
-    }
-  };
+  tujuan: `Memastikan target ketercapaian ${cp}`,
+  tugas: `Kerjakan soal/tugas dengan ${profilLulusan}`,
+  urutan_kerja: "Catatlah setiap tahapan kegiatan pembelajaran yang kamu lakukan, berilah penanda pada poin penting yang dicapai",
+
+  // ✅ rubrik tetap STRING agar FRONTEND TIDAK ERROR
+  rubrik: `Catatlah keterlibatan Anda dalam setiap tahapan kegiatan pembelajaran pada Kegiatan Inti menggunakan skala 1–4 secara jujur.`,
+
+  // ✅ tabel_penilaian_diri ditambahkan terpisah, tidak mengubah struktur lama
+  tabel_penilaian_diri: {
+    instruksi: `Isilah tabel penilaian diri berikut berdasarkan keterlibatan Anda dalam setiap tahapan kegiatan pada Kegiatan Inti, gunakan skala 1–4 secara jujur.`,
+    skala: "1-4",
+    indikator: langkah
+      .filter((x) => !x.startsWith("**"))
+      .map((x) => `Keterlibatan dalam kegiatan: ${x}`)
+  }
 }

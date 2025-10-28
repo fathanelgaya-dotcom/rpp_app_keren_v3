@@ -26,7 +26,10 @@ export const exportWord = async (req, res) => {
     const doc = new Document({
       styles: {
         default: {
-          document: { run: { font: "Cambria", size: 24 }, paragraph: { spacing: { line: 360 } } },
+          document: {
+            run: { font: "Cambria", size: 24 },
+            paragraph: { spacing: { line: 360 } },
+          },
         },
         paragraphStyles: [
           {
@@ -62,7 +65,10 @@ export const exportWord = async (req, res) => {
                 new Paragraph({
                   spacing: { after: 100 },
                   tabStops: [{ type: "left", position: 4000 }],
-                  children: [new TextRun({ text: `${k.replaceAll("_", " ")}:\t`, bold: true }), new TextRun({ text: v })],
+                  children: [
+                    new TextRun({ text: `${k.replaceAll("_", " ")}:\t`, bold: true }),
+                    new TextRun({ text: v }),
+                  ],
                 })
             ),
 
@@ -104,14 +110,52 @@ export const exportWord = async (req, res) => {
             ...(rpp.kegiatan_penutup || []).map((x) => new Paragraph({ text: x, bullet: { level: 0 } })),
 
             heading("Pengalaman Murid"),
-            ...Object.entries(rpp.pengalaman_murid || {}).map(([k, v]) => new Paragraph({ children: [new TextRun({ text: `${k}: `, bold: true }), new TextRun({ text: v })] })),
+            ...Object.entries(rpp.pengalaman_murid || {}).map(([k, v]) =>
+              new Paragraph({
+                children: [new TextRun({ text: `${k}: `, bold: true }), new TextRun({ text: v })],
+              })
+            ),
 
             heading("Asesmen Formatif"),
             ...Object.entries(rpp.asesmen_formatif || {}).flatMap(([k, v]) => {
-              const title = new Paragraph({ children: [new TextRun({ text: `${k.replaceAll("_", " ")}:`, bold: true })], spacing: { before: 100, after: 50 } });
+              const title = new Paragraph({
+                children: [new TextRun({ text: `${k.replaceAll("_", " ")}:`, bold: true })],
+                spacing: { before: 100, after: 50 },
+              });
               return Array.isArray(v)
                 ? [title, ...v.map((item, idx) => new Paragraph({ text: `${idx + 1}. ${item}`, indent: { left: 720 }, spacing: { after: 100 } }))]
                 : [title, new Paragraph({ text: v || "", indent: { left: 720 } })];
+            }),
+
+            heading("Rubrik Penilaian"),
+            new Paragraph({ text: "Instrumen Penilaian Diri", italics: true, spacing: { after: 200 } }),
+
+            new Table({
+              width: { size: 100, type: "pct" },
+              rows: [
+                new TableRow({
+                  children: [
+                    new TableCell({ children: [new Paragraph({ text: "No", bold: true })], rowSpan: 2 }),
+                    new TableCell({ children: [new Paragraph({ text: "Indikator Penilaian", bold: true })], rowSpan: 2 }),
+                    new TableCell({
+                      children: [new Paragraph({ text: "Hasil Penilaian Diri", bold: true, alignment: AlignmentType.CENTER })],
+                      columnSpan: 4,
+                    }),
+                  ],
+                }),
+                new TableRow({
+                  children: ["1", "2", "3", "4"].map((n) => new TableCell({ children: [new Paragraph({ text: n, alignment: AlignmentType.CENTER })] })),
+                }),
+                ...(rpp.indikator_tujuan_pembelajaran || []).map((indikator, i) =>
+                  new TableRow({
+                    children: [
+                      new TableCell({ children: [new Paragraph({ text: `${i + 1}`, alignment: AlignmentType.CENTER })] }),
+                      new TableCell({ children: [new Paragraph({ text: indikator })] }),
+                      ...[1, 2, 3, 4].map(() => new TableCell({ children: [new Paragraph({ text: "" })] })),
+                    ],
+                  })
+                ),
+              ],
             }),
           ],
         },
@@ -140,36 +184,60 @@ export const exportWord = async (req, res) => {
                         children: [
                           new TableCell({ children: [new Paragraph({ text: "No", alignment: AlignmentType.CENTER, bold: true })], rowSpan: 2 }),
                           new TableCell({ children: [new Paragraph({ text: "Indikator Penilaian", bold: true })], rowSpan: 2 }),
-                          new TableCell({
-                            children: [new Paragraph({ text: "Hasil Penilaian Diri", bold: true, alignment: AlignmentType.CENTER })],
-                            columnSpan: 4,
+                      new TableCell({
+                        children: [
+                          new Paragraph({
+                            text: "Hasil Penilaian Diri",
+                            bold: true,
+                            alignment: AlignmentType.CENTER,
                           }),
                         ],
+                        columnSpan: 4,
                       }),
-                      new TableRow({ children: ["1", "2", "3", "4"].map((n) => new TableCell({ children: [new Paragraph({ text: n, alignment: AlignmentType.CENTER })] })) }),
-                      ...rpp.lembar_kerja.tabel_penilaian_diri.indikator.map((indic, i) =>
-                        new TableRow({
-                          children: [
-                            new TableCell({ children: [new Paragraph({ text: `${i + 1}`, alignment: AlignmentType.CENTER })] }),
-                            new TableCell({ children: [new Paragraph({ text: indic })] }),
-                            ...[1, 2, 3, 4].map(() => new TableCell({ children: [new Paragraph({ text: "" })] })),
-                          ],
-                        })
-                      ),
                     ],
                   }),
-                ]
-              : []),
-          ],
-        },
-      ],
-    });
+                  // Header Skala
+                  new TableRow({
+                    children: ["1", "2", "3", "4"].map(
+                      (n) =>
+                        new TableCell({
+                          children: [new Paragraph({ text: n, alignment: AlignmentType.CENTER })],
+                        })
+                    ),
+                  }),
+                  // Body
+                  ...rpp.lembar_kerja.tabel_penilaian_diri.indikator.map((indic, i) =>
+                    new TableRow({
+                      children: [
+                        new TableCell({
+                          children: [new Paragraph({ text: `${i + 1}`, alignment: AlignmentType.CENTER })],
+                        }),
+                        new TableCell({
+                          children: [new Paragraph({ text: indic })],
+                        }),
+                        ...[1, 2, 3, 4].map(
+                          () =>
+                            new TableCell({
+                              children: [new Paragraph({ text: "" })],
+                            })
+                        ),
+                      ],
+                    })
+                  ),
+                ],
+              }),
+            ]
+          : []),
+        ],
+      },
+    ],
+  });
 
-    const buffer = await Packer.toBuffer(doc);
-    res.setHeader("Content-Disposition", 'attachment; filename="RPP_Integrasi_App.docx"');
-    res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
-    res.send(buffer);
-  } catch (error) {
-    res.status(500).json({ message: "Gagal membuat dokumen Word", error: error.message });
-  }
+  const buffer = await Packer.toBuffer(doc);
+  res.setHeader("Content-Disposition", 'attachment; filename="RPP_Integrasi_App.docx"');
+  res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+  res.send(buffer);
+} catch (error) {
+  res.status(500).json({ message: "Gagal membuat dokumen Word", error: error.message });
+}
 };
