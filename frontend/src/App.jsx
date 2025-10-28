@@ -267,6 +267,60 @@ export default function App() {
       <p><b>Tugas:</b> {rpp.lembar_kerja?.tugas}</p>
       <p><b>Urutan Kerja:</b> {rpp.lembar_kerja?.urutan_kerja}</p>
       <p><b>Rubrik:</b> {rpp.lembar_kerja?.rubrik}</p>
+{rpp.lembar_kerja?.tabel_penilaian_diri?.indikator?.length > 0 && (
+  <>
+    <p style={{ marginTop: "10px", marginBottom: "6px" }}>
+      <i>{rpp.lembar_kerja.tabel_penilaian_diri.instruksi}</i>
+    </p>
+
+    <table
+      style={{
+        width: "100%",
+        borderCollapse: "collapse",
+        marginBottom: "10px",
+        fontSize: "0.95rem",
+      }}
+    >
+      <thead>
+        <tr>
+          <th style={{ border: "1px solid #000", padding: "6px", width: "48px" }}>No</th>
+          <th style={{ border: "1px solid #000", padding: "6px", textAlign: "left" }}>Indikator Penilaian</th>
+          <th style={{ border: "1px solid #000", padding: "6px", textAlign: "center" }} colSpan={4}>
+            Hasil Penilaian Diri
+          </th>
+        </tr>
+        <tr>
+          <th style={{ border: "1px solid #000", padding: "6px" }}></th>
+          <th style={{ border: "1px solid #000", padding: "6px" }}></th>
+          {["1", "2", "3", "4"].map((n) => (
+            <th
+              key={n}
+              style={{ border: "1px solid #000", padding: "6px", width: "52px", textAlign: "center" }}
+            >
+              {n}
+            </th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {rpp.lembar_kerja.tabel_penilaian_diri.indikator.map((indikator, i) => (
+          <tr key={i}>
+            <td style={{ border: "1px solid #000", padding: "6px", textAlign: "center" }}>{i + 1}</td>
+            <td style={{ border: "1px solid #000", padding: "6px" }}>{indikator}</td>
+            {[0, 1, 2, 3].map((k) => (
+              <td
+                key={k}
+                style={{ border: "1px solid #000", padding: "6px", textAlign: "center" }}
+              >
+                □
+              </td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </>
+)}
     </div>
   );
 

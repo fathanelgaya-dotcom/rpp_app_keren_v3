@@ -612,7 +612,14 @@ const finalDigital = dynamicDigital;
       tujuan: `Memastikan target ketercapaian ${cp}`,
       tugas: `Kerjakan soal/tugas dengan ${profilLulusan}`,
       urutan_kerja: "Catatlah setiap tahapan kegiatan pembelajaran yang kamu lakukan, berilah penanda pada poin penting yang dicapai", 
-      rubrik: `Buatlah tabel pengukuran ${profilLulusan} dan ${topikKBC} dengan menggunakan skala 1-4, Lakukan refleksi jujur berdasarkan keterlibatan dalam proses pembelajaran.`
+      rubrik: ...,
+        tabel_penilaian_diri: {
+          instruksi: `Isilah tabel penilaian diri berikut berdasarkan keterlibatan Anda dalam setiap tahapan kegiatan pada *Kegiatan Inti*, gunakan skala 1–4 secara jujur.`,
+          skala: "1-4",
+          indikator: langkah
+            .filter((x) => !x.startsWith("**"))
+            .map((x, i) => `Keterlibatan dalam kegiatan: ${x}`)
+        }
     }
   };
 }
