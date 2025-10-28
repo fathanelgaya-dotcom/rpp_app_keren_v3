@@ -623,8 +623,9 @@ const finalDigital = dynamicDigital;
     indikator: langkah
       .filter((x) => !x.startsWith("**"))
       .map((x) => {
-    const title = x.split(":")[0]; // ambil hanya teks sebelum tanda titik dua
-    return `Keterlibatan dalam kegiatan: ${title}`;
+    let clean = x.replace(/\*\*/g, "").trim();
+    let titleOnly = clean.split(":")[0].trim();
+    return `Keterlibatan dalam kegiatan: ${titleOnly}`;
   }),
 },
 };
