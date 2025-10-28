@@ -626,8 +626,9 @@ const finalDigital = dynamicDigital;
     let clean = x.replace(/\*\*/g, "").trim();
     let titleOnly = clean.split(":")[0].trim();
     return `Keterlibatan dalam kegiatan: ${titleOnly}`;
-     }),
-}, // ✅ TUTUP tabel_penilaian_diri DENGAN koma
-}; // ✅ TUTUP lembar_kerja DENGAN titik koma
+    })
+}; 
 
-}; // ✅ TUTUP return buildMock DENGAN titik koma
+} 
+
+};
