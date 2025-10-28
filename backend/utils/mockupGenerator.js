@@ -623,8 +623,9 @@ const finalDigital = dynamicDigital;
     indikator: langkah
       .filter((x) => !x.startsWith("**"))
       .map((x) => {
-        let clean = x.replace(/\*\*/g, "").trim();
-        let titleOnly = clean.split(":").slice(0, 2).join(":").trim();
+        let clean = x.replace(/\*\*/g, "").trim(); // buang "**"
+        let parts = clean.split(":").map(s => s.trim());
+        let titleOnly = parts[1] ? parts[0] + ": " + parts[1] : parts[0];
         return `Keterlibatan dalam kegiatan: ${titleOnly}`;
       }),
   },
