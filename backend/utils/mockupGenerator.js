@@ -625,7 +625,7 @@ const finalDigital = dynamicDigital;
       .map((x) => {
     const title = x.split(":")[0]; // ambil hanya teks sebelum tanda titik dua
     return `Keterlibatan dalam kegiatan: ${title}`;
-  })
-}
+  }),
+},
 };
 }
