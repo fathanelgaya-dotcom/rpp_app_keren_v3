@@ -624,9 +624,9 @@ const finalDigital = dynamicDigital;
       .filter((x) => !x.startsWith("**"))
       .map((x) => {
     let clean = x.replace(/\*\*/g, "").trim();
-    let titleOnly = clean.split(":")[0].trim();
+    let titleOnly = clean.split(":").slice(0, 2).join(":").trim();
     return `Keterlibatan dalam kegiatan: ${titleOnly}`;
-   }),
+  }),
     },
   },
 };
