@@ -620,13 +620,15 @@ const finalDigital = dynamicDigital;
   tabel_penilaian_diri: {
     instruksi: `Isilah tabel penilaian diri berikut berdasarkan keterlibatan Anda dalam setiap tahapan kegiatan pada Kegiatan Inti, gunakan skala 1–4 secara jujur.`,
      skala: "1-4",
-    indikator: langkah
+     indikator: langkah
       .filter((x) => !x.startsWith("**"))
       .map((x) => {
-        let clean = x.replace(/\*\*/g, "").trim(); // buang "**"
+        let clean = x.replace(/\*\*/g, "").trim();
         let parts = clean.split(":").map(s => s.trim());
-        let titleOnly = parts[1] ? parts[0] + ": " + parts[1] : parts[0];
+        let titleOnly = parts.slice(0, 2).join(": "); // hanya ambil 2 segmen pertama
         return `Keterlibatan dalam kegiatan: ${titleOnly}`;
       }),
+  },
+
   },
 };
