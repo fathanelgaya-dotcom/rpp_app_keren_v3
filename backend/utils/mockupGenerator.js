@@ -626,7 +626,6 @@ const finalDigital = dynamicDigital;
     let clean = x.replace(/\*\*/g, "").trim();
     let titleOnly = clean.split(":").slice(0, 2).join(":").trim();
     return `Keterlibatan dalam kegiatan: ${titleOnly}`;
-  }),
-    },
+  },
   },
 };
