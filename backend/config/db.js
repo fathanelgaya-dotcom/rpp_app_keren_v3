@@ -5,26 +5,23 @@ dotenv.config();
 import pkg from "pg";
 const { Pool } = pkg;
 
-console.log("📌 DATABASE_URL =", JSON.stringify(process.env.DATABASE_URL));
+// Log untuk memastikan benar
+console.log("📌 DATABASE_URL =", process.env.DATABASE_URL ? "LOADED" : "MISSING");
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: { rejectUnauthorized: false },
-  idleTimeoutMillis: 30000, // tutup koneksi idle setelah 30 detik
-  connectionTimeoutMillis: 10000, // batasi waktu tunggu koneksi
+  idleTimeoutMillis: 30000,
+  connectionTimeoutMillis: 10000,
 });
 
-// Auto reconnect handler
+// Jangan panggil pool.connect()
+// Pool akan otomatis membuat koneksi saat query dijalankan.
+
 pool.on("error", (err) => {
-  console.error("⚠️ Unexpected error on idle client", err.message);
-  setTimeout(() => {
-    console.log("🔁 Reconnecting to database...");
-    pool.connect().catch((e) => console.error("❌ Reconnect failed:", e.message));
-  }, 3000);
+  console.error("⚠️ Unexpected error on idle client:", err.message);
+  // Jangan reconnect manual, biarkan Pool yang mengatur
 });
-
-pool.connect()
-  .then(() => console.log("✅ PostgreSQL connected via Pool"))
-  .catch((err) => console.error("❌ DB connection error:", err.message));
 
 export default pool;
+
