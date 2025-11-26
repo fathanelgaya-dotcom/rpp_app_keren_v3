@@ -1,17 +1,22 @@
 import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
-import pool from "./config/db.js";    // koneksi PostgreSQL
+import pool from "./config/db.js";    // PostgreSQL
 import bcrypt from "bcryptjs";
-import rppRoutes from "./routes/rppRoutes.js"; // ✅ mount router
+
+// Routes
+import rppRoutes from "./routes/rppRoutes.js";
+import exportRoutes from "./routes/exportRoutes.js";
 
 const app = express();
 
-// middleware
+// =======================
+// MIDDLEWARE
+// =======================
 app.use(cors());
 app.use(bodyParser.json());
 
-// log request
+// Log setiap request
 app.use((req, res, next) => {
   console.log(new Date().toISOString(), req.method, req.originalUrl);
   next();
@@ -68,13 +73,18 @@ app.post("/api/login", async (req, res) => {
 });
 
 // =======================
-// ROUTES
+// API ROUTES
 // =======================
-app.use("/api", rppRoutes);  // ✅ Mount router rppRoutes
+app.use("/api", rppRoutes);
+app.use("/api", exportRoutes);
 
-import exportRoutes from "./routes/exportRoutes.js";
-
-app.use("/api", exportRoutes); // ✅ tambahkan ini setelah rppRoutes
+// =======================
+// HEALTH CHECK (AMAN DIPING)
+// TIDAK ADA QUERY DATABASE
+// =======================
+app.get("/health", (req, res) => {
+  res.status(200).send("OK");
+});
 
 // =======================
 // START SERVER
@@ -83,3 +93,4 @@ const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
+
