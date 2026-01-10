@@ -396,7 +396,7 @@ function detectKognitif(text) {
 }
 
 // helper: theme categories
-function istema...keywords) {
+function isTema(...keywords) {
   return keywords.some(k => temaLower.includes(k));
 }
 
