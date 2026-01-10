@@ -364,7 +364,6 @@ const register = async () => {
         ))}
       </tbody>
     </table>
-    </div>
   );
 
   return (
