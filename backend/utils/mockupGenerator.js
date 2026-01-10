@@ -960,17 +960,23 @@ const sintaks =
   urutan_kerja: "Catatlah setiap tahapan kegiatan pembelajaran yang kamu lakukan, berilah penanda pada poin penting yang dicapai",
 
   // ✅ rubrik tetap STRING agar FRONTEND TIDAK ERROR
-  rubrik: `Catatlah keterlibatan anda dalam setiap tahapan kegiatan pembelajaran pada Kegiatan Inti dengan jujur.`,
+rubrik: `Catatlah keterlibatan anda dalam setiap tahapan kegiatan pembelajaran pada Kegiatan Inti dengan jujur.`,
 
-  // ✅ tabel_penilaian_diri ditambahkan terpisah, tidak mengubah struktur lama
-  ttabel_penilaian_diri: {
+// ✅ tabel_penilaian_diri untuk LEMBAR KERJA
+tabel_penilaian_diri: {
   instruksi: `Isilah tabel penilaian diri berikut, gunakan skala 1–4!`,
   skala: "1-4",
-  indikator: sintaks
-    .filter((x) => x.startsWith("**"))
-    .map((x) =>
-      `Keterlibatan dalam kegiatan: ${x.replace(/\*\*/g, "").replace(":", "").trim()}`
-    )
+  indikator: Array.isArray(sintaks)
+    ? sintaks
+        .filter((x) => x.startsWith("**"))
+        .map(
+          (x) =>
+            `Keterlibatan dalam kegiatan: ${x
+              .replace(/\*\*/g, "")
+              .replace(":", "")
+              .trim()}`
+        )
+    : [],
 },
 
   },
