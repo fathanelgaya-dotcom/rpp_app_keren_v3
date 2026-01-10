@@ -364,8 +364,8 @@ const register = async () => {
         ))}
       </tbody>
     </table>
-  </>
-  )}
+  </div>
+  );
 
   return (
     <div className="app" style={{ background: `linear-gradient(135deg, ${COLORS[theme]} 0%, #2f2b5a 100%)` }}>
