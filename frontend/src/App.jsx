@@ -329,8 +329,8 @@ const register = async () => {
       <thead>
         <tr>
           <th style={{ border: "1px solid #000", padding: "6px", width: "48px" }}>No</th>
-          <th style={{ border: "1px solid #000", padding: "6px", textAlign: "left" }}>Indikator Penilaian</th>
-          <th style={{ border: "1px solid #000", padding: "6px", textAlign: "center" }} colSpan={4}>
+          <th style={{ border: "1px solid #000", padding: "6px" }}>Indikator Penilaian</th>
+          <th style={{ border: "1px solid #000", padding: "6px" }} colSpan={4}>
             Hasil Penilaian Diri
           </th>
         </tr>
@@ -338,20 +338,21 @@ const register = async () => {
           <th style={{ border: "1px solid #000", padding: "6px" }}></th>
           <th style={{ border: "1px solid #000", padding: "6px" }}></th>
           {["1", "2", "3", "4"].map((n) => (
-            <th
-              key={n}
-              style={{ border: "1px solid #000", padding: "6px", width: "52px", textAlign: "center" }}
-            >
+            <th key={n} style={{ border: "1px solid #000", padding: "6px", textAlign: "center" }}>
               {n}
             </th>
           ))}
         </tr>
       </thead>
       <tbody>
-        {(rpp.lembar_kerja?.tabel_penilaian_diri?.indikator || []).map((indikator, i) => (
+        {(rpp.lembar_kerja.tabel_penilaian_diri.indikator || []).map((indikator, i) => (
           <tr key={i}>
-            <td style={{ border: "1px solid #000", padding: "6px", textAlign: "center" }}>{i + 1}</td>
-            <td style={{ border: "1px solid #000", padding: "6px" }}>{indikator}</td>
+            <td style={{ border: "1px solid #000", padding: "6px", textAlign: "center" }}>
+              {i + 1}
+            </td>
+            <td style={{ border: "1px solid #000", padding: "6px" }}>
+              {indikator}
+            </td>
             {[0, 1, 2, 3].map((k) => (
               <td
                 key={k}
@@ -364,8 +365,8 @@ const register = async () => {
         ))}
       </tbody>
     </table>
-  </div>
-  );
+  </>
+)}
 
   return (
     <div className="app" style={{ background: `linear-gradient(135deg, ${COLORS[theme]} 0%, #2f2b5a 100%)` }}>
