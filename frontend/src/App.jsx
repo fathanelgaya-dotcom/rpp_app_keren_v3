@@ -26,6 +26,8 @@ const PEDAGOGIK_OPTIONS = [
   "Pembelajaran Mendalam (default)",
   "Problem Based Learning (PBL)",
   "Project Based Learning (PjBL)",
+  "Project Based Learning (FIELDS)",
+  "Experiential Learning (ARKA)",
   "Discovery Learning",
   "Inquiry Learning",
   "PAIKEM",
