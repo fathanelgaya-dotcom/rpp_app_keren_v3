@@ -396,7 +396,7 @@ function detectKognitif(text) {
 }
 
 // helper: theme categories
-function isTema(...keywords) {
+function istema...keywords) {
   return keywords.some(k => temaLower.includes(k));
 }
 
@@ -420,7 +420,7 @@ let dynamicDigital = null;
 // INQUIRY (suitable for investigative/explorative themes)
 if (praktek.includes("inquiry") || praktek.includes("inQUIRY".toLowerCase())) {
   // broadened theme matches for scientific/investigative topics
-  if (isTema("wujud", "benda", "materi", "energi", "perubahan", "reaksi", "sifat", "ekosistem", "lingkungan")) {
+  if (istema"wujud", "benda", "materi", "energi", "perubahan", "reaksi", "sifat", "ekosistem", "lingkungan")) {
     dynamicLingkungan = [
       `Lingkungan kelas sebagai ruang eksplorasi awal konsep dan diskusi hipotesis.`,
       `Lingkungan nyata melalui observasi langsung fenomena terkait ${tema}.`,
@@ -625,7 +625,7 @@ else if (praktek.includes("experiential") || praktek.includes("arka") || praktek
 }
 
 // helper: theme categories
-function isTema(...keywords) {
+function istema...keywords) {
   return keywords.some(k => temaLower.includes(k));
 }
 
@@ -643,7 +643,7 @@ function isMadrasahTheme() {
 // INQUIRY (suitable for investigative/explorative themes)
 if (praktek.includes("inquiry") || praktek.includes("inQUIRY".toLowerCase())) {
   // broadened theme matches for scientific/investigative topics
-  if (isTema("wujud", "benda", "materi", "energi", "perubahan", "reaksi", "sifat", "ekosistem", "lingkungan")) {
+  if (istema"wujud", "benda", "materi", "energi", "perubahan", "reaksi", "sifat", "ekosistem", "lingkungan")) {
     dynamicLingkungan = [
       `Lingkungan kelas sebagai ruang eksplorasi awal konsep dan diskusi hipotesis.`,
       `Lingkungan nyata melalui observasi langsung fenomena terkait ${tema}.`,
