@@ -366,7 +366,7 @@ else if (praktek.includes("lok")) {
   }
   
   // Project Based Learning (FIEDS)
-else if (praktek.includes("fieds") || praktek.includes("fieds") || praktek.includes("fieds".toLowerCase())) {
+if (praktek.includes("fieds") || praktek.includes("fields")) {
   dynamicLingkungan = [
     `Lingkungan nyata untuk pelaksanaan proyek dan pengujian produk.`,
     `Lingkungan kelas sebagai ruang perencanaan, prototyping, dan presentasi.`,
