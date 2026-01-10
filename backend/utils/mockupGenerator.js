@@ -954,29 +954,34 @@ const sintaks =
       skala: "1-4",
       kriteria: { 4: "Sangat baik", 3: "Baik", 2: "Cukup", 1: "Kurang" }
     },
-    lembar_kerja: {
+    
+  lembar_kerja: {
   tujuan: `Memastikan target ketercapaian ${cp}`,
   tugas: `Kerjakan soal/tugas dengan ${profilLulusan}`,
-  urutan_kerja: "Catatlah setiap tahapan kegiatan pembelajaran yang kamu lakukan, berilah penanda pada poin penting yang dicapai",
+  urutan_kerja:
+    "Catatlah setiap tahapan kegiatan pembelajaran yang kamu lakukan, berilah penanda pada poin penting yang dicapai",
 
-  // ✅ rubrik tetap STRING agar FRONTEND TIDAK ERROR
-rubrik: `Catatlah keterlibatan anda dalam setiap tahapan kegiatan pembelajaran pada Kegiatan Inti dengan jujur.`,
+  // ✅ rubrik tetap STRING (deskripsi umum)
+  rubrik:
+    "Catatlah keterlibatan anda dalam setiap tahapan kegiatan pembelajaran pada Kegiatan Inti dengan jujur.",
 
-// ✅ tabel_penilaian_diri untuk LEMBAR KERJA
-tabel_penilaian_diri: {
-  instruksi: `Isilah tabel penilaian diri berikut, gunakan skala 1–4!`,
-  skala: "1-4",
-  indikator: Array.isArray(sintaks)
-    ? sintaks
-        .filter((x) => x.startsWith("**"))
-        .map(
-          (x) =>
-            `Keterlibatan dalam kegiatan: ${x
+  // ✅ tabel penilaian diri KHUSUS lembar kerja
+  tabel_penilaian_diri: {
+    instruksi: "Isilah tabel penilaian diri berikut, gunakan skala 1–4!",
+    skala: "1-4",
+    indikator: Array.isArray(sintaks)
+      ? sintaks
+          .filter((x) => typeof x === "string" && x.startsWith("**"))
+          .map((x) => {
+            const fase = x
               .replace(/\*\*/g, "")
               .replace(":", "")
-              .trim()}`
-        )
-    : [],
+              .trim();
+
+            return `Keterlibatan dalam kegiatan: ${fase}`;
+          })
+      : [],
+  },
 },
 
   },
