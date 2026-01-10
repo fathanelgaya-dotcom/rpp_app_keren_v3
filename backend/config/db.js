@@ -5,22 +5,24 @@ dotenv.config();
 import pkg from "pg";
 const { Pool } = pkg;
 
-// Log untuk memastikan benar
+// Log status env (aman)
 console.log("📌 DATABASE_URL =", process.env.DATABASE_URL ? "LOADED" : "MISSING");
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: { rejectUnauthorized: false },
-  idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 10000,
+
+  // ⬇️ DIPERKETAT (ANTI HANG + HEMAT NEON)
+  connectionTimeoutMillis: 3000, // max 3 detik nunggu DB
+  idleTimeoutMillis: 10000,      // idle cepat dilepas
+  max: 5,                        // batasi koneksi
 });
 
-// Jangan panggil pool.connect()
-// Pool akan otomatis membuat koneksi saat query dijalankan.
+// Jangan pool.connect()
+// Pool auto-handle
 
 pool.on("error", (err) => {
-  console.error("⚠️ Unexpected error on idle client:", err.message);
-  // Jangan reconnect manual, biarkan Pool yang mengatur
+  console.error("⚠️ PG pool error:", err.message);
 });
 
 export default pool;
