@@ -67,27 +67,67 @@ export default function App() {
 
   const onChange = (k, v) => setForm((prev) => ({ ...prev, [k]: v }));
 
-  const register = async () => {
-    try {
-      const r = await axios.post(`${API_BASE}/api/register`, registerForm);
-      setInfo(r.data.ok ? `Register sukses: ${r.data.user.username}` : `Register gagal: ${r.data.error}`);
-    } catch (e) {
+  const [authLoading, setAuthLoading] = useState(false);
+
+const register = async () => {
+  if (authLoading) return;
+
+  setAuthLoading(true);
+  setInfo("Memproses registrasi...");
+
+  try {
+    const r = await axios.post(
+      `${API_BASE}/api/register`,
+      registerForm,
+      { timeout: 8000 } // ⬅️ KRUSIAL: cegah request menggantung
+    );
+
+    if (r.data.ok) {
+      setInfo(`Register sukses: ${r.data.user.username}`);
+    } else {
+      setInfo(`Register gagal: ${r.data.error}`);
+    }
+  } catch (e) {
+    if (e.code === "ECONNABORTED") {
+      setInfo("Server sedang menyiapkan sistem, silakan coba lagi sebentar.");
+    } else {
       setInfo("Register error: " + e.message);
     }
-  };
+  } finally {
+    setAuthLoading(false);
+  }
+};
 
   const login = async () => {
-    try {
-      const r = await axios.post(`${API_BASE}/api/login`, loginForm);
-      if (r.data.ok) {
-        setUser(r.data.user);
-        setGenerateCount(r.data.user.generate_count || 0);
-        setInfo(`Login sukses: ${r.data.user.username}`);
-      } else setInfo(`Login gagal: ${r.data.error}`);
-    } catch (e) {
+  if (authLoading) return;
+
+  setAuthLoading(true);
+  setInfo("Memproses login...");
+
+  try {
+    const r = await axios.post(
+      `${API_BASE}/api/login`,
+      loginForm,
+      { timeout: 8000 } // ⬅️ cegah request menggantung
+    );
+
+    if (r.data.ok) {
+      setUser(r.data.user);
+      setGenerateCount(r.data.user.generate_count || 0);
+      setInfo(`Login sukses: ${r.data.user.username}`);
+    } else {
+      setInfo(`Login gagal: ${r.data.error}`);
+    }
+  } catch (e) {
+    if (e.code === "ECONNABORTED") {
+      setInfo("Server sedang menyiapkan sistem, silakan coba lagi sebentar.");
+    } else {
       setInfo("Login error: " + e.message);
     }
-  };
+  } finally {
+    setAuthLoading(false);
+  }
+};
 
   const generate = async () => {
     if (!user) return setInfo("Login dulu sebelum generate.");
@@ -339,18 +379,64 @@ export default function App() {
 
       {!user && (
         <div className="login-box">
-          <div className="register-section">
-            <label>User Name<input value={registerForm.username} onChange={e => setRegisterForm({ ...registerForm, username: e.target.value })} /></label>
-            <label>Password<input type="password" value={registerForm.password} onChange={e => setRegisterForm({ ...registerForm, password: e.target.value })} /></label>
-            <button onClick={register}>Registrasi</button>
-          </div>
-          <div className="login-section">
-            <label>User Name<input value={loginForm.username} onChange={e => setLoginForm({ ...loginForm, username: e.target.value })} /></label>
-            <label>Password<input type="password" value={loginForm.password} onChange={e => setLoginForm({ ...loginForm, password: e.target.value })} /></label>
-            <button onClick={login}>Login</button>
-          </div>
-        </div>
-      )}
+  <div className="register-section">
+    <label>
+      User Name
+      <input
+        value={registerForm.username}
+        onChange={e =>
+          setRegisterForm({ ...registerForm, username: e.target.value })
+        }
+        disabled={authLoading}
+      />
+    </label>
+
+    <label>
+      Password
+      <input
+        type="password"
+        value={registerForm.password}
+        onChange={e =>
+          setRegisterForm({ ...registerForm, password: e.target.value })
+        }
+        disabled={authLoading}
+      />
+    </label>
+
+    <button onClick={register} disabled={authLoading}>
+      {authLoading ? "Memproses..." : "Registrasi"}
+    </button>
+  </div>
+
+  <div className="login-section">
+    <label>
+      User Name
+      <input
+        value={loginForm.username}
+        onChange={e =>
+          setLoginForm({ ...loginForm, username: e.target.value })
+        }
+        disabled={authLoading}
+      />
+    </label>
+
+    <label>
+      Password
+      <input
+        type="password"
+        value={loginForm.password}
+        onChange={e =>
+          setLoginForm({ ...loginForm, password: e.target.value })
+        }
+        disabled={authLoading}
+      />
+    </label>
+
+    <button onClick={login} disabled={authLoading}>
+      {authLoading ? "Memproses..." : "Login"}
+    </button>
+  </div>
+</div>
 
       <div className="form-preview">
         <div className="form-col">
@@ -365,7 +451,7 @@ export default function App() {
           }).map(([k, label]) => (
             <label key={k}>{label}<input value={form[k]} onChange={e => onChange(k, e.target.value)} /></label>
           ))}
-          <label>CP<textarea value={form.cp} onChange={e => onChange("cp", e.target.value)} /></label>
+          <label>Target Pembelajaran<textarea value={form.cp} onChange={e => onChange("cp", e.target.value)} /></label>
 
           <label>Profil Lulusan
             <select value={form.profilLulusan} onChange={e => onChange("profilLulusan", e.target.value)}>
