@@ -890,6 +890,9 @@ else if (praktek.includes("experiential") || praktek.includes("arka") || praktek
 const finalLingkungan = dynamicLingkungan;
 const finalMitra = dynamicMitra;
 const finalDigital = dynamicDigital;
+const sintaks =
+  sintaksMap[praktekPedagogik] ||
+  sintaksMap["Pembelajaran Mendalam (default)"];  
 
   return {
     identitas: {
@@ -960,13 +963,15 @@ const finalDigital = dynamicDigital;
   rubrik: `Catatlah keterlibatan anda dalam setiap tahapan kegiatan pembelajaran pada Kegiatan Inti dengan jujur.`,
 
   // ✅ tabel_penilaian_diri ditambahkan terpisah, tidak mengubah struktur lama
-  tabel_penilaian_diri: {
-    instruksi: `Isilah tabel penilaian diri berikut, gunakan skala 1–4!`,
-     skala: "1-4",
-     indikator: sintaks.map(
-  (fase) => `Keterlibatan dalam kegiatan: ${fase}`
-),
-  },
+  ttabel_penilaian_diri: {
+  instruksi: `Isilah tabel penilaian diri berikut, gunakan skala 1–4!`,
+  skala: "1-4",
+  indikator: sintaks
+    .filter((x) => x.startsWith("**"))
+    .map((x) =>
+      `Keterlibatan dalam kegiatan: ${x.replace(/\*\*/g, "").replace(":", "").trim()}`
+    )
+},
 
   },
 };
