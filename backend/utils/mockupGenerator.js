@@ -643,7 +643,7 @@ function isMadrasahTheme() {
 // INQUIRY (suitable for investigative/explorative themes)
 if (praktek.includes("inquiry") || praktek.includes("inQUIRY".toLowerCase())) {
   // broadened theme matches for scientific/investigative topics
-  if (istema"wujud", "benda", "materi", "energi", "perubahan", "reaksi", "sifat", "ekosistem", "lingkungan")) {
+  if (isTema("wujud", "benda", "materi", "energi", "perubahan", "reaksi", "sifat", "ekosistem", "lingkungan")) {
     dynamicLingkungan = [
       `Lingkungan kelas sebagai ruang eksplorasi awal konsep dan diskusi hipotesis.`,
       `Lingkungan nyata melalui observasi langsung fenomena terkait ${tema}.`,
