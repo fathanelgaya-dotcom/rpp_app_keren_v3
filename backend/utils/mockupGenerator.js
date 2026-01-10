@@ -625,7 +625,7 @@ else if (praktek.includes("experiential") || praktek.includes("arka") || praktek
 }
 
 // helper: theme categories
-function istema...keywords) {
+function isTema...keywords) {
   return keywords.some(k => temaLower.includes(k));
 }
 
