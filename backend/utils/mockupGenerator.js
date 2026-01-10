@@ -63,7 +63,7 @@ export function buildMock(payload) {
       `Murid menyampaikan hasil penyelidikan dan solusi yang diusulkan secara bergiliran.`,
       `Guru membimbing murid lain untuk mendengarkan dan memberikan tanggapan sederhana.`,
       `Murid saling menghargai pendapat dan hasil kerja kelompok lain.`,
-      `Guru memberikan klarifikasi dan penguatan terhadap konsep ${tema} yang dipelajari.`
+      `Guru memberikan klarifikasi dan penguatan terhadap konsep ${tema} yang dipelajari.`,
       `**Merefleksi:**`,
       `**Refleksi:**`,
       `Guru mengajak murid merefleksi kembali proses pembelajaran yang telah dilakukan.`,
