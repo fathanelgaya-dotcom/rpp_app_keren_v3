@@ -305,7 +305,7 @@ const register = async () => {
     </tr>
   ))}
 </tbody>
-</table>
+</table
 
       <h4>Lembar Kerja:</h4>
       <p><b>Tujuan:</b> {rpp.lembar_kerja?.tujuan}</p>
