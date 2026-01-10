@@ -348,7 +348,7 @@ const register = async () => {
         </tr>
       </thead>
       <tbody>
-        {rpp.lembar_kerja.tabel_penilaian_diri.indikator.map((indikator, i) => (
+        {(rpp.lembar_kerja?.tabel_penilaian_diri?.indikator || []).map((indikator, i) => (
           <tr key={i}>
             <td style={{ border: "1px solid #000", padding: "6px", textAlign: "center" }}>{i + 1}</td>
             <td style={{ border: "1px solid #000", padding: "6px" }}>{indikator}</td>
@@ -439,6 +439,7 @@ const register = async () => {
     </button>
   </div>
 </div>
+    )}
 
       <div className="form-preview">
         <div className="form-col">
