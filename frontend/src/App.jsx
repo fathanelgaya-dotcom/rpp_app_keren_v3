@@ -26,7 +26,7 @@ const PEDAGOGIK_OPTIONS = [
   "Pembelajaran Mendalam (default)",
   "Problem Based Learning (PBL)",
   "Project Based Learning (PjBL)",
-  "Project Based Learning (FIELDS)",
+  "Project Based Learning (FIDS)",
   "Experiential Learning (ARKA)",
   "Discovery Learning",
   "Inquiry Learning",
@@ -181,7 +181,7 @@ const register = async () => {
         </tbody>
       </table>
 
-      <h4>Capaian Pembelajaran:</h4>
+      <h4>Target Pembelajaran:</h4>
       <p>{rpp.capaian_pembelajaran}</p>
 
       <h4>Tujuan Pembelajaran:</h4>
