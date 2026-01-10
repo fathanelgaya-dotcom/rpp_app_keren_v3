@@ -1,4 +1,5 @@
 /* ========== buildMock (fallback kalau AI gagal) ========== */
+import { sintaksMap } from "./sintaksMap.js";
 export function buildMock(payload) {
   const {
     namaMadrasah = "Madrasah Mock",
@@ -962,17 +963,9 @@ const finalDigital = dynamicDigital;
   tabel_penilaian_diri: {
     instruksi: `Isilah tabel penilaian diri berikut, gunakan skala 1–4!`,
      skala: "1-4",
-     indikator: langkah
-      .filter((x) => !x.startsWith("**"))
-      .map((x) => {
-        let clean = x.replace(/\*\*/g, "").trim(); // hilangkan dekorasi model seperti **Memahami:**
-    
-        // Ambil hanya inti fase sebelum narasi guru/murid dimulai
-        // Logika: bagian sebelum KALIMAT MULAI (guru/murid/verb panjang)
-        let fase = clean.split(/,| murid | guru /i)[0].trim();
-
-        return `Keterlibatan dalam kegiatan: ${fase}`;
-      }),
+     indikator: sintaks.map(
+  (fase) => `Keterlibatan dalam kegiatan: ${fase}`
+),
   },
 
   },
