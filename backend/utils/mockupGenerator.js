@@ -907,7 +907,7 @@ const sintaks =
       "Profil Lulusan": profilLulusan,
       "Topik KBC": topikKBC
     },
-    target_pembelajaran: cp,
+    capaian_pembelajaran: cp,
     tujuan_pembelajaran: [
       `Setelah mengikuti kegiatan pembelajaran, murid mampu memahami dan mengaplikasikan konsep dasar ${tema} sebagai bagian dari penerapan bentuk ${topikKBC} dengan penuh ${profilLulusan}.`
     ],
