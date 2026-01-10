@@ -8,6 +8,18 @@ import bcrypt from "bcryptjs";
 import rppRoutes from "./routes/rppRoutes.js";
 import exportRoutes from "./routes/exportRoutes.js";
 
+// DB helper (fast-fail, no hang)
+const dbQuery = async (q, params = []) => {
+  try {
+    return await pool.query(q, params);
+  } catch (err) {
+    if (err.code === "ETIMEDOUT" || err.message?.includes("timeout")) {
+      throw new Error("DB_NOT_READY");
+    }
+    throw err;
+  }
+};
+
 const app = express();
 
 // =======================
@@ -23,7 +35,7 @@ app.use((req, res, next) => {
 });
 
 // =======================
-// REGISTER
+// REGISTER (FAST-FAIL, NO HANG)
 // =======================
 app.post("/api/register", async (req, res) => {
   const { username, password } = req.body || {};
@@ -39,16 +51,25 @@ app.post("/api/register", async (req, res) => {
       VALUES ($1, $2)
       RETURNING id, username, created_at
     `;
-    const r = await pool.query(q, [username, hash]);
-    res.json({ ok: true, user: r.rows[0] });
+
+    const r = await dbQuery(q, [username, hash]);
+
+    return res.json({ ok: true, user: r.rows[0] });
   } catch (err) {
+    if (err.message === "DB_NOT_READY") {
+      return res.status(503).json({
+        ok: false,
+        error: "Server sedang menyiapkan database, silakan coba lagi sebentar.",
+      });
+    }
+
     console.error("Register error:", err.message);
-    res.status(500).json({ ok: false, error: err.message });
+    return res.status(500).json({ ok: false, error: "Register gagal" });
   }
 });
 
 // =======================
-// LOGIN
+// LOGIN (FAST-FAIL, NO HANG)
 // =======================
 app.post("/api/login", async (req, res) => {
   const { username, password } = req.body || {};
@@ -58,17 +79,38 @@ app.post("/api/login", async (req, res) => {
   }
 
   try {
-    const r = await pool.query("SELECT * FROM users WHERE username = $1", [username]);
-    if (!r.rows.length) return res.status(400).json({ ok: false, error: "invalid user" });
+    const r = await dbQuery(
+      "SELECT * FROM users WHERE username = $1",
+      [username]
+    );
+    if (!r.rows.length) {
+      return res.status(400).json({ ok: false, error: "invalid user" });
+    }
 
     const user = r.rows[0];
-    const match = bcrypt.compareSync(password, user.password_hash);
-    if (!match) return res.status(400).json({ ok: false, error: "wrong password" });
+    const match = await bcrypt.compare(password, user.password_hash);
+    if (!match) {
+      return res.status(400).json({ ok: false, error: "wrong password" });
+    }
 
-    res.json({ ok: true, user: { id: user.id, username: user.username, generate_count: user.generate_count || 0 } });
+    return res.json({
+      ok: true,
+      user: {
+        id: user.id,
+        username: user.username,
+        generate_count: user.generate_count || 0,
+      },
+    });
   } catch (err) {
+    if (err.message === "DB_NOT_READY") {
+      return res.status(503).json({
+        ok: false,
+        error: "Server sedang menyiapkan database, silakan coba lagi sebentar.",
+      });
+    }
+
     console.error("Login error:", err.message);
-    res.status(500).json({ ok: false, error: err.message });
+    return res.status(500).json({ ok: false, error: "Login gagal" });
   }
 });
 
