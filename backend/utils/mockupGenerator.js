@@ -366,7 +366,7 @@ else if (praktek.includes("lok")) {
   }
   
   // Project Based Learning (FIEDS)
-else if (praktek.includes("project") || praktek.includes("fieds") || praktek.includes("fieds".toLowerCase())) {
+else if (praktek.includes("fieds") || praktek.includes("fieds") || praktek.includes("fieds".toLowerCase())) {
   dynamicLingkungan = [
     `Lingkungan nyata untuk pelaksanaan proyek dan pengujian produk.`,
     `Lingkungan kelas sebagai ruang perencanaan, prototyping, dan presentasi.`,
@@ -385,7 +385,7 @@ else if (praktek.includes("project") || praktek.includes("fieds") || praktek.inc
 }
 
   // Experiential Learning (ARKA)
-else if (praktek.includes("experiental") || praktek.includes("arka") || praktek.includes("arka".toLowerCase())) {
+else if (praktek.includes("experiential") || praktek.includes("arka") || praktek.includes("arka".toLowerCase())) {
   dynamicLingkungan = [
     `Lingkungan nyata untuk pelaksanaan proyek dan pengujian produk.`,
     `Lingkungan kelas sebagai ruang perencanaan, prototyping, dan presentasi.`,
@@ -628,7 +628,7 @@ else if (praktek.includes("paikem")) {
 }
 
  // Project Based Learning (FIEDS)
-else if (praktek.includes("project") || praktek.includes("fieds") || praktek.includes("fieds".toLowerCase())) {
+else if (praktek.includes("fieds") || praktek.includes("fieds") || praktek.includes("fieds".toLowerCase())) {
   dynamicLingkungan = [
     `Lingkungan nyata untuk pelaksanaan proyek dan pengujian produk.`,
     `Lingkungan kelas sebagai ruang perencanaan, prototyping, dan presentasi.`,
@@ -647,7 +647,7 @@ else if (praktek.includes("project") || praktek.includes("fieds") || praktek.inc
 }
 
   // Experiential Learning (ARKA)
-else if (praktek.includes("experiental") || praktek.includes("arka") || praktek.includes("arka".toLowerCase())) {
+else if (praktek.includes("experiential") || praktek.includes("arka") || praktek.includes("arka".toLowerCase())) {
   dynamicLingkungan = [
     `Lingkungan nyata untuk pelaksanaan proyek dan pengujian produk.`,
     `Lingkungan kelas sebagai ruang perencanaan, prototyping, dan presentasi.`,
