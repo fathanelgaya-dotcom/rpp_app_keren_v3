@@ -108,8 +108,53 @@ export function buildMock(payload) {
       `Evaluasi: Guru memberikan peer assessment atau penilaian kelompok tentang ${tema}, murid menyajikan hasil kerja kelompok dan menilai hasil kelompok lain.`,
       `Memberi penghargaan: Guru memberikan apresiasi untuk kelompok/siswa berprestasi baik kelompok maupun individual terkait, murid menerima penghargaan dan memberikan umpan balik positif.`
     ],
-
     
+    "Experiential Learning (ARKA)": [
+  `**Memahami:**`,
+  `**Aktivitas:** Guru merancang pengalaman belajar langsung yang kontekstual terkait ${tema}, seperti kegiatan lapangan, simulasi, praktik nyata, atau pengalaman inderawi di lingkungan sekitar.`,
+  `Guru memberikan panduan agar murid menjalani aktivitas dengan kesadaran penuh, murid menggunakan pancaindra untuk mengamati, mendengar, merasakan, dan mengalami langsung hal-hal yang berkaitan dengan ${tema}.`,
+  `Guru menekankan fokus dan kehadiran penuh selama aktivitas, murid mengikuti kegiatan dengan tertib dan penuh perhatian sebagai bentuk penghargaan terhadap proses belajar.`,
+
+  `**Mengaplikasi:**`,
+  `**Refleksi:** Guru mengajak murid mengungkapkan pengalaman yang dirasakan selama aktivitas, murid menceritakan perasaan, kesan, dan hal-hal yang paling bermakna terkait ${tema}.`,
+  `Guru mengajukan pertanyaan reflektif, murid membandingkan pengalaman sebelum dan sesudah melakukan aktivitas dengan penuh kesadaran.`,
+  `Guru menuntun murid menemukan nilai dan pesan dari pengalaman tersebut, murid menyadari pentingnya sikap peduli, menghargai, dan bertanggung jawab dalam konteks ${tema}.`,
+
+  `**Konsep:** Guru mengaitkan pengalaman murid dengan konsep pengetahuan, nilai moral, atau nilai keimanan yang relevan dengan ${tema}.`,
+  `Guru menjelaskan makna yang lebih dalam dari pengalaman yang telah dialami, murid memahami bahwa pengalaman konkret merupakan pintu masuk untuk memahami konsep abstrak.`,
+  `Guru menegaskan hubungan antara pengalaman, nilai, dan pembelajaran, murid menyimpulkan konsep utama yang dipelajari dari kegiatan tersebut.`,
+
+  `**Merefleksi:**`,
+  `**Aplikasi:** Guru memberikan tantangan penerapan nilai dalam kehidupan sehari-hari, murid merancang tindakan nyata yang dapat dilakukan secara konsisten terkait ${tema}.`,
+  `Guru membimbing murid menetapkan komitmen sederhana namun bermakna, murid mempraktikkan sikap dan perilaku positif sesuai nilai yang dipelajari.`,
+  `Guru memfasilitasi tindak lanjut dan berbagi pengalaman, murid melaporkan hasil penerapan dan merefleksikan perubahan sikap yang terjadi setelah pembelajaran.`
+],
+
+    "Project Based Learning (FIEDS)": [
+  `**Memahami:**`,
+  `**Feel:** Guru menghadirkan situasi nyata, fenomena, cerita kontekstual, atau masalah sehari-hari yang berkaitan dengan ${tema}, murid mengamati dan merasakan persoalan tersebut secara emosional dan personal.`,
+  `Guru memantik kesadaran murid melalui pertanyaan reflektif, murid mengekspresikan perasaan, kepedulian, dan pandangan awal terhadap situasi yang berkaitan dengan ${tema}.`,
+  `Guru menegaskan bahwa perasaan, kepedulian, dan empati murid adalah pintu masuk pembelajaran, murid memahami bahwa pembelajaran dimulai dari kepekaan terhadap lingkungan, diri, dan sesama.`,
+
+  `**Imagine:** Guru mengajak murid membayangkan kondisi ideal atau solusi yang diharapkan terkait ${tema}, murid menuangkan gagasan tentang perubahan, perbaikan, atau karya yang dapat diwujudkan.`,
+  `Guru memfasilitasi diskusi imajinatif dan kreatif, murid mengembangkan ide awal tentang bentuk projek, manfaat, dan dampak positif dari projek yang akan dibuat.`,
+  `Guru membimbing murid memilih ide yang paling relevan dan realistis, murid menyepakati arah projek yang akan dikerjakan bersama.`,
+
+  `**Mengaplikasi:**`,
+  `**Explore:** Guru membimbing murid merancang langkah kerja projek, murid menyusun pertanyaan kunci, mencari informasi, dan mengumpulkan data dari berbagai sumber yang berkaitan dengan ${tema}.`,
+  `Guru memfasilitasi eksplorasi melalui observasi, wawancara, studi literatur, atau eksperimen sederhana, murid mencatat temuan penting sebagai dasar pelaksanaan projek.`,
+  `Guru membantu murid mengorganisasi informasi, murid menyimpulkan hasil eksplorasi sebagai landasan tindakan nyata.`,
+
+  `**Do:** Guru memandu pelaksanaan projek sesuai rencana, murid bekerja secara kolaboratif untuk menghasilkan produk, aksi, atau solusi nyata yang berkaitan dengan ${tema}.`,
+  `Guru melakukan pendampingan dan umpan balik berkala, murid memperbaiki proses dan hasil kerja berdasarkan arahan dan refleksi sementara.`,
+  `Guru memastikan setiap murid berperan aktif, murid menunjukkan tanggung jawab, kreativitas, dan kemandirian selama proses projek.`,
+
+  `**Merefleksi:**`,
+  `**Share:** Guru memfasilitasi presentasi hasil projek, murid menyampaikan proses, hasil, dan pembelajaran yang diperoleh dari projek ${tema}.`,
+  `Guru mengajak murid melakukan refleksi bersama, murid mengevaluasi keberhasilan, tantangan, serta nilai-nilai yang diperoleh selama proses pembelajaran.`,
+  `Guru menegaskan makna pembelajaran, murid menyimpulkan bahwa projek bukan hanya menghasilkan produk, tetapi juga membentuk sikap, kepedulian, dan pemahaman yang bermakna tentang ${tema}.`
+],
+  
   };
 
   const langkah = langkahMap[praktekPedagogik] || langkahMap.default;
@@ -319,6 +364,44 @@ else if (praktek.includes("lok")) {
       `Ruang diskusi daring untuk umpan balik.`
     ];
   }
+  
+  // Project Based Learning (FIEDS)
+else if (praktek.includes("project") || praktek.includes("fieds") || praktek.includes("fieds".toLowerCase())) {
+  dynamicLingkungan = [
+    `Lingkungan nyata untuk pelaksanaan proyek dan pengujian produk.`,
+    `Lingkungan kelas sebagai ruang perencanaan, prototyping, dan presentasi.`,
+    `Lingkungan digital untuk dokumentasi proyek dan kolaborasi jarak jauh.`
+  ];
+  dynamicMitra = [
+    `Rekan kelompok sebagai kolaborator berperan pada setiap fase proyek.`,
+    `Mitra komunitas atau eksternal yang relevan dengan tujuan proyek.`,
+    `Sumber bahan dan dokumentasi teknis untuk pengembangan produk.` 
+  ];
+  dynamicDigital = [
+    `Alat dokumentasi digital untuk merekam proses dan hasil proyek.`,
+    `Platform kolaborasi daring untuk pembagian tugas dan revisi karya.`,
+    `Sumber referensi digital untuk pengayaan proyek.` 
+  ];
+}
+
+  // Experiential Learning (ARKA)
+else if (praktek.includes("experiental") || praktek.includes("arka") || praktek.includes("arka".toLowerCase())) {
+  dynamicLingkungan = [
+    `Lingkungan nyata untuk pelaksanaan proyek dan pengujian produk.`,
+    `Lingkungan kelas sebagai ruang perencanaan, prototyping, dan presentasi.`,
+    `Lingkungan digital untuk dokumentasi proyek dan kolaborasi jarak jauh.`
+  ];
+  dynamicMitra = [
+    `Rekan kelompok sebagai kolaborator berperan pada setiap fase proyek.`,
+    `Mitra komunitas atau eksternal yang relevan dengan tujuan proyek.`,
+    `Sumber bahan dan dokumentasi teknis untuk pengembangan produk.` 
+  ];
+  dynamicDigital = [
+    `Alat dokumentasi digital untuk merekam proses dan hasil proyek.`,
+    `Platform kolaborasi daring untuk pembagian tugas dan revisi karya.`,
+    `Sumber referensi digital untuk pengayaan proyek.` 
+  ];
+}
 }
 
 // helper: theme categories
@@ -544,6 +627,45 @@ else if (praktek.includes("paikem")) {
   ];
 }
 
+ // Project Based Learning (FIEDS)
+else if (praktek.includes("project") || praktek.includes("fieds") || praktek.includes("fieds".toLowerCase())) {
+  dynamicLingkungan = [
+    `Lingkungan nyata untuk pelaksanaan proyek dan pengujian produk.`,
+    `Lingkungan kelas sebagai ruang perencanaan, prototyping, dan presentasi.`,
+    `Lingkungan digital untuk dokumentasi proyek dan kolaborasi jarak jauh.`
+  ];
+  dynamicMitra = [
+    `Rekan kelompok sebagai kolaborator berperan pada setiap fase proyek.`,
+    `Mitra komunitas atau eksternal yang relevan dengan tujuan proyek.`,
+    `Sumber bahan dan dokumentasi teknis untuk pengembangan produk.` 
+  ];
+  dynamicDigital = [
+    `Alat dokumentasi digital untuk merekam proses dan hasil proyek.`,
+    `Platform kolaborasi daring untuk pembagian tugas dan revisi karya.`,
+    `Sumber referensi digital untuk pengayaan proyek.` 
+  ];
+}
+
+  // Experiential Learning (ARKA)
+else if (praktek.includes("experiental") || praktek.includes("arka") || praktek.includes("arka".toLowerCase())) {
+  dynamicLingkungan = [
+    `Lingkungan nyata untuk pelaksanaan proyek dan pengujian produk.`,
+    `Lingkungan kelas sebagai ruang perencanaan, prototyping, dan presentasi.`,
+    `Lingkungan digital untuk dokumentasi proyek dan kolaborasi jarak jauh.`
+  ];
+  dynamicMitra = [
+    `Rekan kelompok sebagai kolaborator berperan pada setiap fase proyek.`,
+    `Mitra komunitas atau eksternal yang relevan dengan tujuan proyek.`,
+    `Sumber bahan dan dokumentasi teknis untuk pengembangan produk.` 
+  ];
+  dynamicDigital = [
+    `Alat dokumentasi digital untuk merekam proses dan hasil proyek.`,
+    `Platform kolaborasi daring untuk pembagian tugas dan revisi karya.`,
+    `Sumber referensi digital untuk pengayaan proyek.` 
+  ];
+}
+}
+
 const finalLingkungan = dynamicLingkungan;
 const finalMitra = dynamicMitra;
 const finalDigital = dynamicDigital;
@@ -597,9 +719,9 @@ const finalDigital = dynamicDigital;
     
     asesmen_formatif: {
       tes_tulis: [
-        `Bagaimana caramu menunjukkan pemahaman tentang ${tema}?`,
-        `Dalam kondisi atau keadaan apa konsep ${tema} dapat diimplementasikan?`,
-        `Sebutkan hal-hal baru yang menarik tentang ${tema}!`
+        `Setelah kamu mengikuti pembelajaran dengan baik bagaimana caramu menunjukkan pemahaman tentang ${tema}?`,
+        `Menurut pendapatmu dalam kondisi atau keadaan apa konsep ${tema} dapat diimplementasikan?`,
+        `Ungkapkan dengan jujur hal-hal baru yang menarik tentang ${tema}!`
       ],
       observasi: "Partisipasi siswa",
       produk: "Laporan/tugas proyek"
