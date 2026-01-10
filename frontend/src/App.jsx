@@ -286,21 +286,25 @@ const register = async () => {
         </tr>
       </thead>
       <tbody>
-        {(rpp.indikator_tujuan_pembelajaran || []).map((indikator, i) => (
-          <tr key={i}>
-            <td style={{ border: "1px solid #000", padding: "6px", textAlign: "center" }}>{i + 1}</td>
-            <td style={{ border: "1px solid #000", padding: "6px" }}>{indikator}</td>
-            {/* empat kolom skala 1-4 (kosong untuk diisi manual) */}
-            {[0,1,2,3].map((k) => (
-              <td key={k} style={{ border: "1px solid #000", padding: "6px", textAlign: "center" }}>
-            {/* kotak kosong: */}
-            □
-            </td>
-          ))}
-        </tr>
-        ))}
-      </tbody>
-      </table>
+  {(rpp.indikator_tujuan_pembelajaran || []).map((indikator, i) => (
+    <tr key={i}>
+      <td style={{ border: "1px solid #000", padding: "6px", textAlign: "center" }}>
+        {i + 1}
+      </td>
+      <td style={{ border: "1px solid #000", padding: "6px" }}>
+        {indikator}
+      </td>
+      {[0, 1, 2, 3].map((k) => (
+        <td
+          key={k}
+          style={{ border: "1px solid #000", padding: "6px", textAlign: "center" }}
+        >
+          □
+        </td>
+      ))}
+    </tr>
+  ))}
+</tbody>
 
       <h4>Lembar Kerja:</h4>
       <p><b>Tujuan:</b> {rpp.lembar_kerja?.tujuan}</p>
