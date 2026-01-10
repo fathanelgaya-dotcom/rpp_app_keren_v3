@@ -285,7 +285,7 @@ const register = async () => {
           ))}
         </tr>
       </thead>
-      <tbody>
+     <tbody>
   {(rpp.indikator_tujuan_pembelajaran || []).map((indikator, i) => (
     <tr key={i}>
       <td style={{ border: "1px solid #000", padding: "6px", textAlign: "center" }}>
@@ -305,6 +305,7 @@ const register = async () => {
     </tr>
   ))}
 </tbody>
+</table>
 
       <h4>Lembar Kerja:</h4>
       <p><b>Tujuan:</b> {rpp.lembar_kerja?.tujuan}</p>
