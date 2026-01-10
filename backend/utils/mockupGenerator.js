@@ -970,16 +970,9 @@ const sintaks =
     instruksi: "Isilah tabel penilaian diri berikut, gunakan skala 1–4!",
     skala: "1-4",
     indikator: Array.isArray(sintaks)
-      ? sintaks
-          .filter((x) => typeof x === "string" && x.startsWith("**"))
-          .map((x) => {
-            const fase = x
-              .replace(/\*\*/g, "")
-              .replace(":", "")
-              .trim();
-
-            return `Keterlibatan dalam kegiatan: ${fase}`;
-          })
+      ? sintaks.map(
+          (fase) => `Keterlibatan dalam kegiatan: ${fase}`
+        )
       : [],
   },
 }, 
