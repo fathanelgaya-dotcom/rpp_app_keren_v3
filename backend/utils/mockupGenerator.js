@@ -346,7 +346,7 @@ export function buildMock(payload) {
   `Guru memfasilitasi tindak lanjut dan berbagi pengalaman, murid melaporkan hasil penerapan dan merefleksikan perubahan sikap yang terjadi setelah pembelajaran.`
 ],
 
-    "Project Based Learning (FIEDS)": [
+    "Project Based Learning (FIDS)": [
   `**Memahami:**`,
   `**Feel:**`,
   `Guru menghadirkan situasi nyata, fenomena, cerita kontekstual, atau masalah sehari-hari yang berkaitan dengan ${tema}, murid mengamati dan merasakan persoalan tersebut secara emosional dan personal.`,
@@ -586,8 +586,8 @@ else if (praktek.includes("lok")) {
     ];
   }
   
-  // Project Based Learning (FIEDS)
-if (praktek.includes("fieds") || praktek.includes("fields")) {
+  // Project Based Learning (FIDS)
+if (praktek.includes("fids") || praktek.includes("fids")) {
   dynamicLingkungan = [
     `Lingkungan nyata untuk pelaksanaan proyek dan pengujian produk.`,
     `Lingkungan kelas sebagai ruang perencanaan, prototyping, dan presentasi.`,
@@ -848,8 +848,8 @@ else if (praktek.includes("paikem")) {
   ];
 }
 
- // Project Based Learning (FIEDS)
-else if (praktek.includes("fieds") || praktek.includes("fieds") || praktek.includes("fieds".toLowerCase())) {
+ // Project Based Learning (FIDS)
+else if (praktek.includes("fids") || praktek.includes("fids") || praktek.includes("fids".toLowerCase())) {
   dynamicLingkungan = [
     `Lingkungan nyata untuk pelaksanaan proyek dan pengujian produk.`,
     `Lingkungan kelas sebagai ruang perencanaan, prototyping, dan presentasi.`,
@@ -907,7 +907,7 @@ const sintaks =
       "Profil Lulusan": profilLulusan,
       "Topik KBC": topikKBC
     },
-    capaian_pembelajaran: cp,
+    target_pembelajaran: cp,
     tujuan_pembelajaran: [
       `Setelah mengikuti kegiatan pembelajaran, murid mampu memahami dan mengaplikasikan konsep dasar ${tema} sebagai bagian dari penerapan bentuk ${topikKBC} dengan penuh ${profilLulusan}.`
     ],
