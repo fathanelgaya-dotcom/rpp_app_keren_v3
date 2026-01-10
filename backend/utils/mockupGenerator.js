@@ -664,7 +664,7 @@ else if (praktek.includes("experiential") || praktek.includes("arka") || praktek
     `Sumber referensi digital untuk pengayaan proyek.` 
   ];
 }
-}
+
 
 const finalLingkungan = dynamicLingkungan;
 const finalMitra = dynamicMitra;
