@@ -26,6 +26,8 @@ const PEDAGOGIK_OPTIONS = [
   "Pembelajaran Mendalam (default)",
   "Problem Based Learning (PBL)",
   "Project Based Learning (PjBL)",
+  "Project Based Learning (FIDS)",
+  "Experiential Learning (ARKA)",
   "Discovery Learning",
   "Inquiry Learning",
   "PAIKEM",
@@ -67,27 +69,67 @@ export default function App() {
 
   const onChange = (k, v) => setForm((prev) => ({ ...prev, [k]: v }));
 
-  const register = async () => {
-    try {
-      const r = await axios.post(`${API_BASE}/api/register`, registerForm);
-      setInfo(r.data.ok ? `Register sukses: ${r.data.user.username}` : `Register gagal: ${r.data.error}`);
-    } catch (e) {
+  const [authLoading, setAuthLoading] = useState(false);
+
+const register = async () => {
+  if (authLoading) return;
+
+  setAuthLoading(true);
+  setInfo("Memproses registrasi...");
+
+  try {
+    const r = await axios.post(
+      `${API_BASE}/api/register`,
+      registerForm,
+      { timeout: 8000 } // ⬅️ KRUSIAL: cegah request menggantung
+    );
+
+    if (r.data.ok) {
+      setInfo(`Register sukses: ${r.data.user.username}`);
+    } else {
+      setInfo(`Register gagal: ${r.data.error}`);
+    }
+  } catch (e) {
+    if (e.code === "ECONNABORTED") {
+      setInfo("Server sedang menyiapkan sistem, silakan coba lagi sebentar.");
+    } else {
       setInfo("Register error: " + e.message);
     }
-  };
+  } finally {
+    setAuthLoading(false);
+  }
+};
 
   const login = async () => {
-    try {
-      const r = await axios.post(`${API_BASE}/api/login`, loginForm);
-      if (r.data.ok) {
-        setUser(r.data.user);
-        setGenerateCount(r.data.user.generate_count || 0);
-        setInfo(`Login sukses: ${r.data.user.username}`);
-      } else setInfo(`Login gagal: ${r.data.error}`);
-    } catch (e) {
+  if (authLoading) return;
+
+  setAuthLoading(true);
+  setInfo("Memproses login...");
+
+  try {
+    const r = await axios.post(
+      `${API_BASE}/api/login`,
+      loginForm,
+      { timeout: 8000 } // ⬅️ cegah request menggantung
+    );
+
+    if (r.data.ok) {
+      setUser(r.data.user);
+      setGenerateCount(r.data.user.generate_count || 0);
+      setInfo(`Login sukses: ${r.data.user.username}`);
+    } else {
+      setInfo(`Login gagal: ${r.data.error}`);
+    }
+  } catch (e) {
+    if (e.code === "ECONNABORTED") {
+      setInfo("Server sedang menyiapkan sistem, silakan coba lagi sebentar.");
+    } else {
       setInfo("Login error: " + e.message);
     }
-  };
+  } finally {
+    setAuthLoading(false);
+  }
+};
 
   const generate = async () => {
     if (!user) return setInfo("Login dulu sebelum generate.");
@@ -139,7 +181,7 @@ export default function App() {
         </tbody>
       </table>
 
-      <h4>Capaian Pembelajaran:</h4>
+      <h4>Target Pembelajaran:</h4>
       <p>{rpp.capaian_pembelajaran}</p>
 
       <h4>Tujuan Pembelajaran:</h4>
@@ -245,22 +287,27 @@ export default function App() {
           ))}
         </tr>
       </thead>
-      <tbody>
-        {(rpp.indikator_tujuan_pembelajaran || []).map((indikator, i) => (
-          <tr key={i}>
-            <td style={{ border: "1px solid #000", padding: "6px", textAlign: "center" }}>{i + 1}</td>
-            <td style={{ border: "1px solid #000", padding: "6px" }}>{indikator}</td>
-            {/* empat kolom skala 1-4 (kosong untuk diisi manual) */}
-            {[0,1,2,3].map((k) => (
-              <td key={k} style={{ border: "1px solid #000", padding: "6px", textAlign: "center" }}>
-            {/* kotak kosong: */}
-            □
-            </td>
-          ))}
-        </tr>
-        ))}
-      </tbody>
-      </table>
+     <tbody>
+  {(rpp.indikator_tujuan_pembelajaran || []).map((indikator, i) => (
+    <tr key={i}>
+      <td style={{ border: "1px solid #000", padding: "6px", textAlign: "center" }}>
+        {i + 1}
+      </td>
+      <td style={{ border: "1px solid #000", padding: "6px" }}>
+        {indikator}
+      </td>
+      {[0, 1, 2, 3].map((k) => (
+        <td
+          key={k}
+          style={{ border: "1px solid #000", padding: "6px", textAlign: "center" }}
+        >
+          □
+        </td>
+      ))}
+    </tr>
+  ))}
+</tbody>
+</table>
 
       <h4>Lembar Kerja:</h4>
       <p><b>Tujuan:</b> {rpp.lembar_kerja?.tujuan}</p>
@@ -284,8 +331,8 @@ export default function App() {
       <thead>
         <tr>
           <th style={{ border: "1px solid #000", padding: "6px", width: "48px" }}>No</th>
-          <th style={{ border: "1px solid #000", padding: "6px", textAlign: "left" }}>Indikator Penilaian</th>
-          <th style={{ border: "1px solid #000", padding: "6px", textAlign: "center" }} colSpan={4}>
+          <th style={{ border: "1px solid #000", padding: "6px" }}>Indikator Penilaian</th>
+          <th style={{ border: "1px solid #000", padding: "6px" }} colSpan={4}>
             Hasil Penilaian Diri
           </th>
         </tr>
@@ -293,20 +340,21 @@ export default function App() {
           <th style={{ border: "1px solid #000", padding: "6px" }}></th>
           <th style={{ border: "1px solid #000", padding: "6px" }}></th>
           {["1", "2", "3", "4"].map((n) => (
-            <th
-              key={n}
-              style={{ border: "1px solid #000", padding: "6px", width: "52px", textAlign: "center" }}
-            >
+            <th key={n} style={{ border: "1px solid #000", padding: "6px", textAlign: "center" }}>
               {n}
             </th>
           ))}
         </tr>
       </thead>
       <tbody>
-        {rpp.lembar_kerja.tabel_penilaian_diri.indikator.map((indikator, i) => (
+        {(rpp.lembar_kerja.tabel_penilaian_diri.indikator || []).map((indikator, i) => (
           <tr key={i}>
-            <td style={{ border: "1px solid #000", padding: "6px", textAlign: "center" }}>{i + 1}</td>
-            <td style={{ border: "1px solid #000", padding: "6px" }}>{indikator}</td>
+            <td style={{ border: "1px solid #000", padding: "6px", textAlign: "center" }}>
+              {i + 1}
+            </td>
+            <td style={{ border: "1px solid #000", padding: "6px" }}>
+              {indikator}
+            </td>
             {[0, 1, 2, 3].map((k) => (
               <td
                 key={k}
@@ -321,7 +369,7 @@ export default function App() {
     </table>
   </>
 )}
-    </div>
+      </div>
   );
 
   return (
@@ -339,18 +387,65 @@ export default function App() {
 
       {!user && (
         <div className="login-box">
-          <div className="register-section">
-            <label>User Name<input value={registerForm.username} onChange={e => setRegisterForm({ ...registerForm, username: e.target.value })} /></label>
-            <label>Password<input type="password" value={registerForm.password} onChange={e => setRegisterForm({ ...registerForm, password: e.target.value })} /></label>
-            <button onClick={register}>Registrasi</button>
-          </div>
-          <div className="login-section">
-            <label>User Name<input value={loginForm.username} onChange={e => setLoginForm({ ...loginForm, username: e.target.value })} /></label>
-            <label>Password<input type="password" value={loginForm.password} onChange={e => setLoginForm({ ...loginForm, password: e.target.value })} /></label>
-            <button onClick={login}>Login</button>
-          </div>
-        </div>
-      )}
+  <div className="register-section">
+    <label>
+      User Name
+      <input
+        value={registerForm.username}
+        onChange={e =>
+          setRegisterForm({ ...registerForm, username: e.target.value })
+        }
+        disabled={authLoading}
+      />
+    </label>
+
+    <label>
+      Password
+      <input
+        type="password"
+        value={registerForm.password}
+        onChange={e =>
+          setRegisterForm({ ...registerForm, password: e.target.value })
+        }
+        disabled={authLoading}
+      />
+    </label>
+
+    <button onClick={register} disabled={authLoading}>
+      {authLoading ? "Memproses..." : "Registrasi"}
+    </button>
+  </div>
+
+  <div className="login-section">
+    <label>
+      User Name
+      <input
+        value={loginForm.username}
+        onChange={e =>
+          setLoginForm({ ...loginForm, username: e.target.value })
+        }
+        disabled={authLoading}
+      />
+    </label>
+
+    <label>
+      Password
+      <input
+        type="password"
+        value={loginForm.password}
+        onChange={e =>
+          setLoginForm({ ...loginForm, password: e.target.value })
+        }
+        disabled={authLoading}
+      />
+    </label>
+
+    <button onClick={login} disabled={authLoading}>
+      {authLoading ? "Memproses..." : "Login"}
+    </button>
+  </div>
+</div>
+    )}
 
       <div className="form-preview">
         <div className="form-col">
@@ -365,7 +460,7 @@ export default function App() {
           }).map(([k, label]) => (
             <label key={k}>{label}<input value={form[k]} onChange={e => onChange(k, e.target.value)} /></label>
           ))}
-          <label>CP<textarea value={form.cp} onChange={e => onChange("cp", e.target.value)} /></label>
+          <label>Target Pembelajaran<textarea value={form.cp} onChange={e => onChange("cp", e.target.value)} /></label>
 
           <label>Profil Lulusan
             <select value={form.profilLulusan} onChange={e => onChange("profilLulusan", e.target.value)}>
